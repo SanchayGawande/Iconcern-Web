@@ -1,0 +1,311 @@
+<!DOCTYPE html>
+<html class="no-js">
+    <head>
+        <meta charset="utf-8">
+        <title>DiaCare</title>
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <style>
+            body {
+                background-color: #f8f9fa;
+            }
+    
+            .article-card {
+                cursor: pointer;
+                transition: transform 0.3s;
+            }
+    
+            .article-card:hover {
+                transform: scale(1.05);
+            }
+    
+            .card-title {
+                font-size: 1.2rem;
+            }
+    
+            .card-text {
+                font-size: 1rem;
+            }
+            .chatbot-logo {
+                position: fixed;
+                position: fixed;
+                bottom: 20px;
+                right: 20px;
+                z-index: 9999; /* Ensure the logo appears on top of other elements */
+                cursor: pointer;
+                width: 50px; /* Set the width of the logo */
+                height: auto; /* Maintain aspect ratio */
+            }
+            
+        </style>
+        <!-- Fonts -->
+        <link href='http://fonts.googleapis.com/css?family=Open+Sans:400,300,700' rel='stylesheet' type='text/css'>
+        <link href='http://fonts.googleapis.com/css?family=Dosis:400,700' rel='stylesheet' type='text/css'>
+
+        <!-- Bootsrap -->
+        <link rel="stylesheet" href="{{ url_for('static', filename='assets/css/bootstrap.css') }}">
+
+        <!-- Font awesome -->
+        <link rel="stylesheet" href="{{ url_for('static', filename='assets/css/font-awesome.min.css') }}">
+
+        <!-- Owl carousel -->
+        <link rel="stylesheet" href="{{ url_for('static', filename='assets/css/owl.carousel.css') }}">
+
+        <!-- Template main Css -->
+        <link rel="stylesheet" href="{{ url_for('static', filename='assets/css/style.css') }}">
+        
+        <!-- Modernizr -->
+        <script src="{{ url_for('static', filename='assets/js/modernizr-2.6.2.min.js') }}"></script>
+
+
+    </head>
+
+    <body>
+
+
+    <header class="main-header">
+        
+    
+        
+            <div class="navbar-main">
+              
+              <div class="container">
+
+                <div class="navbar-header">
+                  <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+
+                    <span class="sr-only">Toggle navigation</span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+
+                  </button>
+                  
+                  <a class="navbar-brand" href="index.html"><img src="{{ url_for('static', filename='assets/images/Logo.png') }}" alt=""></h2></a>
+                  
+                </div>
+
+                <div id="navbar" class="navbar-collapse collapse pull-right">
+
+                  <ul class="nav navbar-nav">
+
+                    <li><a class="is-active" href="index.html">Articles</a></li>
+                    <li><a href="about.html">ABOUT</a></li>
+                    <li class="has-child"><a href="#">CAUSES</a>
+
+                      <ul class="submenu">
+                         <li class="submenu-item"><a href="causes.html">Causes list </a></li>
+                         <li class="submenu-item"><a href="causes-single.html">Single cause </a></li>
+                         <li class="submenu-item"><a href="causes-single.html">Single cause </a></li>
+                         <li class="submenu-item"><a href="causes-single.html">Single cause </a></li>
+                      </ul>
+
+                    </li>
+                    
+                    <li><a href="contact.html">Login</a></li>
+
+                  </ul>
+
+                </div> <!-- /#navbar -->
+
+              </div> <!-- /.container -->
+              
+            </div> <!-- /.navbar-main -->
+
+
+        </nav> 
+
+    </header> <!-- /. main-header -->
+
+
+
+
+    <!-- Carousel
+    ================================================== -->
+    <div id="homeCarousel" class="carousel slide carousel-home" data-ride="carousel">
+
+          
+
+          <div class="carousel-inner" role="listbox">
+
+            <div class="item active" style=" justify-content: center;">
+                
+
+              <img src="{{ url_for('static', filename='assets/images/slider/doctor1.jpeg') }}" alt="" style="width: 100%; height: 100%;">
+
+              <div class="container">
+
+                <div class="carousel-caption">
+
+                  <h2 class="carousel-title bounceInDown animated slow">Meet the Best Doctors</h2>
+                  <h4 class="carousel-subtitle bounceInUp animated slow ">Discuss your problems</h4>
+                  <a href="#" class="btn btn-lg btn-secondary hidden-xs bounceInUp animated slow" data-toggle="modal" data-target="#donateModal">Make an Appointment</a>
+
+                </div> <!-- /.carousel-caption -->
+
+              </div>
+
+            </div> <!-- /.item -->
+
+
+            </div>
+
+         
+
+    </div><!-- /.carousel -->
+
+    
+
+    <div class="section-home about-us fadeIn animated">
+
+        <div class="container">
+
+            <div class="row">
+
+                <div class="col-md-3 col-sm-6">
+                
+                  <div class="about-us-col">
+
+                        <!-- <div class="col-icon-wrapper">
+                            <img src="{{ url_for('static', filename='assets/images/icons/our-mission-icon.png') }}" alt="">
+                        </div> -->
+                        <h3 class="col-title">our mission</h3>
+                        <div class="col-details">
+
+                          <p>Lorem ipsum dolor sit amet consect adipisscin elit proin vel lectus ut eta esami vera dolor sit amet consect</p>
+                          
+                        </div>
+                        <a href="#" class="btn btn-primary"> Read more </a>
+                    
+                  </div>
+                  
+                </div>
+            </div>
+                  
+        </div>
+    </div>
+                  
+
+
+                
+
+        <!-- Chatbot logo -->
+<div class="chatbot-logo">
+    <img src="{{ url_for('static', filename='chatbot.jpeg') }}" alt="Chatbot Logo" id="chatbot-logo-img" width="50" height="50">
+</div>
+
+        
+    
+
+
+
+    
+
+    <!--  Scripts
+    ================================================== -->
+
+    <script>
+        // Chatbot functionality
+        const chatbotLogo = document.getElementById('chat-bot-logo');
+        const chatbotBox = document.getElementById('chat-bot');
+
+        chatbotLogo.addEventListener('click', () => {
+            chatbotBox.classList.toggle('open');
+        });
+
+        // Fetch data from the API URL
+        const pageSize = 20; // Number of articles per page
+        let currentPage = 1;
+        let articleList = []; // Array to store all articles
+
+        function createArticleCard(article) {
+            const articleFeed = document.getElementById("article-feed");
+            const articleCard = document.createElement("div");
+            articleCard.classList.add("card", "mb-4", "article-card");
+            articleCard.innerHTML = 
+                // <img src="${article.image}" class="card-img-top" alt="${article.title}">
+                `<div class="card-body">
+                    <h5 class="card-title">${article.sub_topic_1}</h5>
+                    <p class="card-text">${article.topic}</p>
+                    <a href="${'/view/'+article._id}" class="btn btn-primary">view form</a>
+                </div>
+            `;
+            articleFeed.appendChild(articleCard);
+        }
+
+        function renderPagination() {
+            const pagination = document.getElementById("pagination");
+            pagination.innerHTML = '';
+
+            const totalPages = Math.ceil(articleList.length / pageSize);
+
+            for (let i = 1; i <= totalPages; i++) {
+                const li = document.createElement("li");
+                li.classList.add("page-item");
+                const a = document.createElement("a");
+                a.classList.add("page-link");
+                a.href = "#";
+                a.textContent = i;
+                a.addEventListener("click", () => handlePageClick(i));
+                li.appendChild(a);
+                pagination.appendChild(li);
+            }
+        }
+
+        function handlePageClick(page) {
+            currentPage = page;
+            displayArticles();
+        }
+
+        function displayArticles() {
+            const startIndex = (currentPage - 1) * pageSize;
+            const endIndex = startIndex + pageSize;
+            const currentArticles = articleList.slice(startIndex, endIndex);
+
+            const articleFeed = document.getElementById("article-feed");
+            articleFeed.innerHTML = '';
+
+            currentArticles.forEach((article) => {
+                createArticleCard(article);
+            });
+
+            renderPagination();
+        }
+
+        fetch("/dashboard/allvalues")
+            .then((response) => response.json())
+            .then((data) => {
+                articleList = data;
+                displayArticles();
+            })
+            .catch((error) => {
+                console.error("Error fetching data:", error);
+            });
+    </script>
+
+    <!-- jQuery -->
+    <script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+    <script>window.jQuery || document.write('<script src="assets/js/jquery-1.11.1.min.js"><\/script>')</script>
+
+    <!-- Bootsrap javascript file -->
+    <script src="{{ url_for('static', filename='assets/css/bootstrap.css') }}"></script>
+    
+    <!-- owl carouseljavascript file -->
+    
+    <script src="{{ url_for('static', filename='assets/js/owl.carousel.min.js') }}"></script>
+
+    <!-- Template main javascript -->
+    <script src="{{ url_for('static', filename='assets/js/main.js') }}"></script>
+
+    <!-- Google Analytics: change UA-XXXXX-X to be your site's ID. -->
+    <script>
+        (function(b,o,i,l,e,r){b.GoogleAnalyticsObject=l;b[l]||(b[l]=
+        function(){(b[l].q=b[l].q||[]).push(arguments)});b[l].l=+new Date;
+        e=o.createElement(i);r=o.getElementsByTagName(i)[0];
+        e.src='//www.google-analytics.com/analytics.js';
+        r.parentNode.insertBefore(e,r)}(window,document,'script','ga'));
+        ga('create','UA-XXXXX-X');ga('send','pageview');
+    </script>
+
+    </body>
+</html>
