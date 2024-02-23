@@ -1,8 +1,0 @@
-Flask==2.2.5
-pymongo==4.5.0
-passlib
-flask-cors
-flask-login
-beautifulsoup4==4.12.2
-pandas
-bs4==0.0.1
