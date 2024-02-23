@@ -99,14 +99,14 @@ def store_form_details(data):
 def get_form_details_all(article_id):
     #try:
     query={'id':article_id}
-    print(query)
+    #print(query)
     # Query the collection to retrieve data (modify as needed)
     data = collection.find(query)
-    print(data)
+    #print(data)
     # Convert MongoDB cursor to a list of dictionaries
     data_list = [json.loads(json.dumps(item,default=str)) for item in data]
     # Return the data as JSON response
-    print(data_list)
+    #print(data_list)
     return jsonify(data_list), 200
 
     # except Exception as e:
@@ -185,7 +185,7 @@ def update_htmlcode_of_article(article_id,html_code):
         query={
             "_id":ObjectId(article_id)
         }
-        print("HELLO",query)
+        #print("HELLO",query)
         update_fields={
             "$set":{"article_template":html_code}
         }
@@ -209,9 +209,9 @@ def chat():
 def view_user_article(article_id):
     query={'_id':ObjectId(article_id)}
     html_template=collection.find_one(query,{'article_template':1,'_id':0}) # The params in this response are form_template,_id 
-    print('html_TEMP:',html_template)
+    #print('html_TEMP:',html_template)
     if html_template:
-        html_template = BeautifulSoup(html_template.get('article_template','<h1>No article available</h1>'), 'html')
+        html_template = BeautifulSoup(html_template.get('article_template','<h1>No article available</h1>'),features="html.parser")
         html_template = html_template.prettify()
     else:
         query={'_id':ObjectId(article_id)}
@@ -303,6 +303,11 @@ def register():
     # Log in the user after registration
     login_user(user)
     return jsonify({"message": "Account created successfully!","user_id":user.get_id()}), 200
+
+
+@app.route('/loginpage', methods=['GET'])
+def loginpage():
+    return render_template('loginpage.html')
 
 @app.route('/login', methods=['POST'])
 def login():
