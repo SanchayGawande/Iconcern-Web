@@ -1,0 +1,130 @@
+
+body, html {
+    margin: 0;
+    padding: 0;
+    font-family: Cambria, Georgia, Times, 'Times New Roman', serif, sans-serif;
+
+	font-size: large;
+	
+}
+
+.slider-nav {
+    display: flex;
+    justify-content: center;
+    padding: 10px 0;
+}
+
+.nav-link {
+    color: #0056b3; /* Blue for text */
+    text-decoration: none;
+    padding: 10px 15px;
+    font-size: 25px;
+    border-bottom: 3px solid transparent; /* Invisible border for a consistent box size */
+}
+
+.nav-link:hover, .nav-link.active {
+    border-bottom-color: #0056b3; /* Blue underline for active/hover state */
+}
+
+
+
+/* Assuming your main navbar has fixed positioning */
+body {
+    padding-top: 60px; /* Adjust based on your main navbar's height */
+}
+
+.form-section {
+    background-color: #ffffff; /* White background for the form */
+    padding: 20px;
+    margin-bottom: 30px; /* Space between each form section */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Subtle shadow for depth */
+    border-radius: 10px; /* Rounded corners for aesthetics */
+}
+
+.section-header h2 {
+    text-align: center;
+    color: #0056b3; /* Dark text for the section title */
+    margin-bottom: 20px;
+    font-family: Cambria, Georgia, Times, 'Times New Roman', serif, sans-serif;
+	font-size: large;
+}
+
+.info-form {
+    max-width: 600px; /* Or any other max-width or width you prefer */
+    margin: auto; /* Centers the form in the section */
+}
+
+.form-group {
+    margin-bottom: 15px;
+}
+
+.form-group label {
+    font-family: Cambria, Georgia, Times, 'Times New Roman', serif, sans-serif;
+    display: block;
+    margin-bottom: 5px;
+}
+
+.form-group input[type="text"],
+.form-group input[type="number"] 
+.form-group input[type="date"]{
+    font-family: Cambria, Georgia, Times, 'Times New Roman', serif, sans-serif;
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}
+
+.radio-group {
+    display: flex;
+    gap: 20px; /* Adjust space between radio buttons */
+}
+
+.radio-group input[type="radio"] {
+    margin-right: 5px;
+}
+
+.radio-group label {
+    display: flex;
+    align-items: center;
+}
+
+button[type="submit"] {
+    background-color: #0056b3; /* Your preferred color for the submit button */
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    display: block; /* Makes the button a block element */
+    width: 100%; /* Button width matches the form fields */
+    box-sizing: border-box; /* Includes padding and border in the element's total width and height */
+}
+
+button[type="submit"]:hover {
+    background-color: #003d82; /* Darker blue on hover */
+}
+
+.tooltip-icon {
+    display: inline-block;
+    margin-left: 5px;
+    color: #0056b3;
+    cursor: help;
+}
+
+.tooltip-icon:hover::after {
+    content: attr(data-tooltip);
+    position: absolute;
+    left: 100%;
+    top: 0;
+    white-space: nowrap;
+    background-color: #ffffff;
+    color: #333333;
+    border: 1px solid #cccccc;
+    padding: 5px;
+    border-radius: 4px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    font-size: 0.875em;
+    z-index: 1000;
+}
+

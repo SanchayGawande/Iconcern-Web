@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+    <meta charset="UTF-8">
+    <title>Login and Registration Form</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='assets/css/style1.css') }}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.0.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.0.0/firebase-auth-compat.js"></script>
+    <script>
+      const firebaseConfig = {
+        apiKey: "AIzaSyCzmYNtsdSqbHyz7z6XwtAFgOODXfbk8ac",
+        authDomain: "dia-user-login.firebaseapp.com",
+        projectId: "dia-user-login",
+        storageBucket: "dia-user-login.appspot.com",
+        messagingSenderId: "938108005404",
+        appId: "1:938108005404:web:cb72eff57c5045690643d9",
+        measurementId: "G-HH3XKTM96F"
+      };
+        firebase.initializeApp(firebaseConfig);
+    </script>
+    <style>
+        .back-to-dashboard {
+            position: fixed;
+            bottom: 20px;
+            left: 20px;
+            background-color: white;
+            color: black;
+            padding: 10px 15px;
+            border-radius: 5px;
+            text-decoration: none;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            transition: background-color 0.3s, color 0.3s;
+        }
+
+        .back-to-dashboard:hover {
+            background-color: #f0f0f0;
+            color: black;
+        }
+
+        .signup-success-popup {
+            display: none;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background-color: white;
+            padding: 20px;
+            border: 1px solid #ccc;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+            z-index: 1000;
+        }
+
+        .signup-success-popup p {
+            margin: 0;
+            padding-bottom: 10px;
+        }
+
+        .signup-success-popup button {
+            padding: 5px 10px;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
+
+        .signup-success-popup button:hover {
+            background-color: #0056b3;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <input type="checkbox" id="flip">
+        <div class="cover">
+            <div class="front">
+                <img src="{{ url_for('static', filename='assets/images/logindoctor.jpg') }}" alt="">
+                <div class="text">
+                    <span class="text-1">Let's get connected <br> </span>
+                </div>
+            </div>
+            <div class="back">
+                <img class="backImg" src="{{ url_for('static', filename='assets/images/logindoctor.jpg') }}" alt="">
+                <div class="text">
+                    <span class="text-1">Let's get connected</span>
+                </div>
+            </div>
+        </div>
+        <div class="forms">
+            <div class="form-content">
+                <div class="login-form">
+                    <div class="title">Login</div>
+                    <div class="input-boxes">
+                        <div class="input-box">
+                            <i class="fas fa-envelope"></i>
+                            <input type="text" id="login-email" placeholder="Enter your email" required>
+                        </div>
+                        <div class="input-box">
+                            <i class="fas fa-lock"></i>
+                            <input type="password" id="login-password" placeholder="Enter your password" required>
+                        </div>
+                        <div class="button input-box">
+                            <input type="button" value="Login" onclick="logIn()">
+                        </div>
+                        <div class="text sign-up-text">Don't have an account? <label for="flip">Signup now</label></div>
+                    </div>
+                </div>
+                <div class="signup-form">
+                    <div class="title">Signup</div>
+                    <div class="input-boxes">
+                        <div class="input-box">
+                            <i class="fas fa-envelope"></i>
+                            <input type="email" id="signup-email" placeholder="Enter your email" required>
+                        </div>
+                        <div class="input-box">
+                            <i class="fas fa-lock"></i>
+                            <input type="password" id="signup-password" placeholder="Enter your password" required>
+                        </div>
+                        <div class="button input-box">
+                            <input type="button" value="Signup" onclick="signUp()">
+                        </div>
+                        <div class="text sign-up-text">Already have an account? <label for="flip">Login now</label></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <a href="/home" class="back-to-dashboard">
+        <i class="fas fa-arrow-left"></i> Back to Home
+    </a>
+
+    <script>
+      function signUp() {
+          var email = document.getElementById('signup-email').value;
+          var password = document.getElementById('signup-password').value;
+
+          firebase.auth().createUserWithEmailAndPassword(email, password)
+              .then((userCredential) => {
+                  // Signup successful. Now send an email verification.
+                  userCredential.user.sendEmailVerification()
+                      .then(() => {
+                          // Verification email sent.
+                          console.log('Verification email sent.');
+                          alert('Verification email sent. Please check your inbox.');
+
+                          // Save user data to MongoDB.
+                          var userData = {
+                              email: email,
+                              emailVerified: false,
+                          };
+
+                          fetch('/register-user', {
+                              method: 'POST',
+                              headers: {
+                                  'Content-Type': 'application/json',
+                              },
+                              body: JSON.stringify(userData),
+                          })
+                          .then(response => response.json())
+                          .then(data => {
+                              console.log('User registered in MongoDB:', data);
+                              window.location.href = '/verify-email'; // Redirect or update UI.
+                          })
+                          .catch((error) => {
+                              console.error('Error registering user in MongoDB:', error);
+                          });
+                      })
+                      .catch((error) => {
+                          // Error sending verification email.
+                          console.error('Error sending verification email:', error);
+                          alert('Error sending verification email. Please try again.');
+                      });
+              })
+              .catch((error) => {
+                  // Error signing up.
+                  console.error('Error signing up:', error);
+                  alert('Error during signup. Please try again.');
+              });
+      }
+
+      function logIn() {
+          var email = document.getElementById('login-email').value;
+          var password = document.getElementById('login-password').value;
+
+          firebase.auth().signInWithEmailAndPassword(email, password)
+              .then((userCredential) => {
+                  // Logged in
+                  if (userCredential.user.emailVerified) {
+                      // Email is verified
+                      alert('Login successful');
+                      window.location.href = '/home'; // Redirect to home page after successful login.
+                  } else {
+                      // Email not verified
+                      alert('Please verify your email before logging in.');
+                  }
+              })
+              .catch((error) => {
+                  // Login failed
+                  console.error('Login failed:', error);
+                  alert('Login failed. Please check your credentials.');
+              });
+      }
+  </script>
+</body>
+</html>

@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Profile Update Form</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+</head>
+<body>
+    <div class="container mt-5">
+        <h2>Update Your Profile Details</h2>
+        <form action="/update_profile" method="post">
+            <h3>Personal Information</h3>
+            <input type="text" name="full_name" placeholder="Full Name or Study ID" required><br>
+            <input type="number" name="age" placeholder="Age" required><br>
+            <input type="text" name="gender" placeholder="Gender" required><br>
+            <input type="text" name="location" placeholder="Location" required><br>
+
+            <h3>Medical Information</h3>
+            <input type="date" name="diagnosis_date" placeholder="Diagnosis Date" required><br>
+            <input type="text" name="blood_glucose_levels" placeholder="Blood Glucose Levels" required><br>
+            <input type="text" name="medications" placeholder="Medications" required><br>
+            <input type="text" name="other_conditions" placeholder="Other Medical Conditions" required><br>
+
+            <h3>Lifestyle Information</h3>
+            <input type="text" name="dietary_preferences" placeholder="Dietary Preferences" required><br>
+            <input type="text" name="physical_activity_level" placeholder="Physical Activity Level" required><br>
+            <input type="text" name="weight" placeholder="Weight" required><br>
+            <input type="text" name="height" placeholder="Height" required><br>
+
+            <h3>Goals and Preferences</h3>
+            <input type="text" name="management_goals" placeholder="Management Goals" required><br>
+            <input type="text" name="learning_preferences" placeholder="Learning Preferences" required><br>
+
+            <button type="submit" class="btn btn-primary">Update Profile</button>
+        </form>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+</body>
+</html>
