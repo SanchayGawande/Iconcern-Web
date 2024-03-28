@@ -40,16 +40,12 @@
         
         <!-- Modernizr -->
         <script src="{{ url_for('static', filename='assets/js/modernizr-2.6.2.min.js') }}"></script>
-        
-        
-
-
     </head>
 
-    <body>
-
+    
 
     <header class="main-header">
+      <nav class="navbar navbar-static-top">
             <div class="navbar-main">
               
               <div class="container">
@@ -84,30 +80,36 @@
 
                     </li> -->
                     
-                    <li><a href="/loginpage">{% if 'user' not in session %}
-                        Login
-                    {% endif %}</a></li>
-
-                    <li><a href="/logout">{% if 'user' in session %}
-                        Logout
-                    {% endif %}</a>
-                    
-                </li>
+                    <li>{% if 'user' not in session %}
+                      <a href="/loginpage">Login</a>
+                    {% endif %}</li>
 
                     
 
+                    <li>{% if 'user' in session %}
+                        <li class="has-child">
+                         <a> <img src="{{ url_for('static', filename='assets/images/user.png') }}" alt="Chatbot Logo" id="chatbot-logo-img" width="45" height="35"></a>
+                          <ul class="submenu">
+                            <li class="submenu-item"><a href="/userprofile">Profile</a></li>
+                            <li class="submenu-item"><a href="/logout">Logout </a></li>
+                          </ul>
+                        </li>
+                        
+                        <!-- <a href="/logout">Logout</a> -->
+                      {% endif %}   
+                    </li>
+
+                    
                   </ul>
+
 
                 </div> <!-- /#navbar -->
 
               </div> <!-- /.container -->
               
             </div> <!-- /.navbar-main -->
-
-
-        </nav> 
-
+          </nav>
     </header> <!-- /. main-header -->
-    </body>
+   
 </html>
 

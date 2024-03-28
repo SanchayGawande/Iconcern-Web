@@ -9,9 +9,10 @@ body, html {
 }
 
 .slider-nav {
-    display: flex;
+    position:fixed; 
     justify-content: center;
     padding: 10px 0;
+    
 }
 
 .nav-link {
@@ -30,7 +31,7 @@ body, html {
 
 /* Assuming your main navbar has fixed positioning */
 body {
-    padding-top: 60px; /* Adjust based on your main navbar's height */
+    padding-top: 00px; /* Adjust based on your main navbar's height */
 }
 
 .form-section {
@@ -50,7 +51,7 @@ body {
 }
 
 .info-form {
-    max-width: 600px; /* Or any other max-width or width you prefer */
+    max-width: 800px; /* Or any other max-width or width you prefer */
     margin: auto; /* Centers the form in the section */
 }
 
@@ -66,7 +67,9 @@ body {
 
 .form-group input[type="text"],
 .form-group input[type="number"] 
-.form-group input[type="date"]{
+.form-group input[type="date"]
+.form-group input[type="textarea"]
+.form-group input[type="fieldset"]{
     font-family: Cambria, Georgia, Times, 'Times New Roman', serif, sans-serif;
     width: 100%;
     padding: 10px;

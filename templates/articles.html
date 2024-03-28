@@ -15,7 +15,6 @@
 
 	</div>
 
-	
 
     <div class="section-home about-us fadeIn animated">
         <div class="container">
@@ -59,13 +58,16 @@
                 
                 `
                 <div class="col-icon-wrapper">
-                    <img src="${article.image}" alt="">
+                    <img src="{{ url_for('static', filename='assets/images/couple-embracing.jpg') }}" alt="">
                 </div>
                 <h3 class="col-title">${article.author}</h3>
                 <div class="col-details">
                     <p>${article.sub_topic_1}</p>
+                    <a href="/view/${article._id}" class="btn btn-primary">Read more</a>
                 </div>
-                <a href="/view/${article._id}" class="btn btn-primary">Read more</a>
+                
+                    
+                
             `;            
             articleCol.appendChild(articleCard);
             articleFeed.appendChild(articleCol);

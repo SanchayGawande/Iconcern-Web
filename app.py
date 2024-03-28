@@ -17,6 +17,7 @@ import firebase_admin
 from firebase_admin import credentials, auth
 
 
+
 # DATABASES = {
 #     'default': {
 #         'ENGINE': 'djongo',
@@ -32,10 +33,11 @@ from firebase_admin import credentials, auth
 #     }
 # }
 
-
 # Firebase Admin Initialization
-cred = credentials.Certificate('/Users/sanchay/Downloads/CS682 - project/diabetes_umass_nursing-Sanchay_workspace/diabetes_umass_nursing-Riya_workspace/dia-user-login-firebase-adminsdk-1o8dc-00dad728ce.json')
-firebase_admin.initialize_app(cred)
+if not firebase_admin._apps:
+    cred = credentials.Certificate('/Users/sanchay/Downloads/CS682 - project/diabetes_umass_nursing-Sanchay_workspace/diabetes_umass_nursing-Sanchay/dia-user-login-firebase-adminsdk-1o8dc-00dad728ce.json')
+    firebase_admin.initialize_app(cred)
+
 
 app = Flask(__name__,static_folder='static')
 app.secret_key = 'd21ef8b23ef23e1d5df1d7d2d037b735b0c3096fb14bcf20da5eec7e06160c33'
@@ -105,9 +107,6 @@ def store_form_details(data):
         return {"message": "Data inserted successfully", "id": str(result.inserted_id)}
     except Exception as e:
        return jsonify({"error": str(e)})
-
-
-
 
 @app.route('/dashboard/article-details/all/<article_id>', methods=['GET'])
 def get_form_details_all(article_id):
@@ -243,10 +242,17 @@ def view_user_article(article_id):
 
 
 
+
+    
+    
+
+
+
 ########
 #LOGIN#
 ########
 # Decorators
+
 
 # Authentication decorator to verify Firebase ID token
 def authenticate(f):
@@ -263,7 +269,6 @@ def authenticate(f):
         return f(*args, **kwargs)
     return wrapper
 
-
 @app.route('/loginpage')
 def loginpage():
     return render_template('loginpage.html')
@@ -272,6 +277,7 @@ def loginpage():
 def registrationpage():
     return render_template('registration.html')
 
+
 @app.route('/login', methods=['POST'])
 def login():
   return User().login()
@@ -279,34 +285,31 @@ def login():
 @app.route('/signup', methods=['POST'])
 def signup():
   return User().signup()
-
-@app.route('/register-user', methods=['POST'])
-def register_user():
-    user_data = request.json
-    if not user_data:
-        return jsonify({'error': 'No user data provided'}), 400
-    users_collection = db1['users']  
-    try:
-        # Insert user data into the 'users' collection
-        users_collection.insert_one(user_data)
-        return jsonify({'message': 'User registered successfully'}), 201
-    except Exception as e:
-        return jsonify({'error': str(e)}), 500
+  return jsonify({'redirect': url_for('registrationpage')})
 
 @app.route('/registration', methods=['POST'])
 def registration():
   return User().registration()
 
-@app.route('/verify-email')
-def verify_email():
-    return render_template('verify_email.html')
-
-
 @app.route('/logout')
 def signout():
     return User().signout()
 
+@app.route('/userprofile', methods=['GET'])
+def userprofile():
+    return render_template('UserProfile.html')
 
+@app.route('/getuserprofile')
+def get_user_profile():
+   return User().getuserprofile()
+
+@app.route('/updateuserprofile', methods=['POST'])
+def update_user_profile():
+    return User().updateuserprofile()
+
+@app.route('/forgot-password')
+def forgot_password():
+    return render_template('forgot_password.html')
 
 if __name__ == '__main__':
     app.run(debug=True)
