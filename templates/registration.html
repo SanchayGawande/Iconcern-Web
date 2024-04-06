@@ -1,171 +1,259 @@
 <!DOCTYPE html>
-<html class="no-js">
-	<link rel="stylesheet" href="{{ url_for('static', filename='assets/css/registration.css') }}">  
-
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Registration</title>
+    <!-- Bootstrap CSS for styling -->
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body {
+            background-color: #1E88E5; /* Lighter blue background to match your theme */
+            display: flex; /* Use flex display to center the container vertically */
+            min-height: 100vh; /* Minimum height of 100% of the viewport */
+            margin: 0; /* Remove the default margin */
+            align-items: center; /* Align items vertically */
+            justify-content: center; /* Center content horizontally */
+        }
+        .form-container {
+            background-color: #ffffff;
+            padding: 50px; /* Increased padding for more white space */
+            border-radius: 8px;
+            box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+            width: 90%; /* Adjusted width for more white space */
+            max-width: 1000px; /* Set a max-width to limit the size of the form */
+            margin: auto; /* Center the form in the viewport */
+            display: flex; /* Using flexbox for inner elements */
+            flex-direction: column; /* Stack the elements vertically */
+            justify-content: space-around; /* Evenly space out the flex items */
+        }
+        .nav-tabs {
+            border-bottom: 4px solid #007bff;
+        }
+        .nav-tabs .nav-item.show .nav-link, .nav-tabs .nav-link.active {
+            color: #007bff;
+            background-color: #fff;
+            border-color: #007bff #007bff #fff;
+        }
+        .nav-tabs .nav-link {
+            border: 1px solid transparent;
+            border-top-left-radius: 0.25rem;
+            border-top-right-radius: 0.25rem;
+            color: #007bff;
+        }
+        .btn-custom {
+            background-color: #007bff; /* Blue shade for the submit button */
+            color: #ffffff;
+        }
+        .btn-custom:hover {
+            background-color: #0056b3;
+        }
+        .tooltip-icon {
+            color: #007bff; /* Blue shade for tooltip icon */
+        }
+        .nav-link:hover {
+            background-color: #e7f0fb; /* Light blue background on hover */
+        }
+        .radio-group label {
+            margin-right: 20px; /* Increased space between each radio button */
+            display: inline-block;
+        }
+        .form-group .radio-group {
+            padding-bottom: 15px;
+        }
+        label {
+            display: block; /* Make sure labels are block-level for spacing */
+            margin-bottom: .5rem;
+        }
+        .form-check {
+            margin-bottom: 10px; /* Adjust the space between form check items */
+        }
+        .form-check label {
+            margin-bottom: 0; /* Adjust label bottom margin within form check */
+        }
+        .form-group {
+            margin-bottom: 20px; /* Increased margin-bottom for more white space */
+        }
+    </style>
+    
+</head>
 <body>
 
-<!-- Assuming this comes right after your main site's navbar -->
-<div class="slider-nav">
-    <a href="#personalDetails" class="nav-link">Personal Details</a>
-    <a href="#medical" class="nav-link">Medical</a>
-    <a href="#lifestyle" class="nav-link">Lifestyle</a>
-    <a href="#goals" class="nav-link">Goals & Preferences</a>
-</div>
+    <div class="container mt-5">
+        <div class="form-container">
+            <!-- Navigation tabs for different sections of the form -->
+            <ul class="nav nav-tabs" id="registrationTab" role="tablist">
+                <li class="nav-item">
+                    <a class="nav-link active" id="personal-tab" data-toggle="tab" href="#personal" role="tab" aria-controls="personal" aria-selected="true">Personal Details</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" id="medical-tab" data-toggle="tab" href="#medical" role="tab" aria-controls="medical" aria-selected="false">Medical</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" id="lifestyle-tab" data-toggle="tab" href="#lifestyle" role="tab" aria-controls="lifestyle" aria-selected="false">Lifestyle</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" id="goals-tab" data-toggle="tab" href="#goals" role="tab" aria-controls="goals" aria-selected="false">Goals & Preferences</a>
+                </li>
+            </ul>
 
-<!-- Sections remain the same -->
-<form id="personalInfoForm" class="info-form" action="/registration" method="post">
-    <section id="personalDetails" class="form-section" >
-        <div class="section-header" style="padding: 60px;">
-            <h2>Personal Information</h2>
-        </div>
-        <div class="form-group">
-                <label for="fullName">Full Name or Study ID:</label>
-                <input type="text" id="fullName" name="fullName" required>
-        </div>
+            <!-- Form content -->
+            <form id="registrationForm" action="/registration" method="post">
+                <div class="tab-content" id="registrationTabContent">
+                    <!-- Personal Details Tab -->
+                    <div class="tab-pane fade show active" id="personal" role="tabpanel" aria-labelledby="personal-tab">
+                        <div class="form-group">
+                            <label for="fullName">Full Name or Study ID:</label>
+                            <input type="text" class="form-control" id="fullName" name="fullName" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="age">Age:</label>
+                            <input type="number" class="form-control" id="age" name="age" required min="14" max="120">
+                        </div>
+                        <div class="form-group">
+                            <label>Gender:</label>
+                            <div class="radio-group">
+                                <div class="form-check form-check-inline">
+                                    <input class="form-check-input" type="radio" name="gender" id="male" value="male">
+                                    <label class="form-check-label" for="male">Male</label>
+                                </div>
+                                <div class="form-check form-check-inline">
+                                    <input class="form-check-input" type="radio" name="gender" id="female" value="female">
+                                    <label class="form-check-label" for="female">Female</label>
+                                </div>
+                                <div class="form-check form-check-inline">
+                                    <input class="form-check-input" type="radio" name="gender" id="other" value="other">
+                                    <label class="form-check-label" for="other">Other</label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
 
-        <div class="form-group">
-                <label for="age">Age:</label>
-                <input type="number" id="age" name="age" required min="0">
-        </div>
-        <div class="form-group">
-                <label>Gender:</label>
-                <div class="radio-group">
-                    <input type="radio" id="male" name="gender" value="male">
-                    <label for="male">Male</label>
-                    <input type="radio" id="female" name="gender" value="female">
-                    <label for="female">Female</label>
-                    <input type="radio" id="other" name="gender" value="other">
-                    <label for="other">Other</label>
+                    <!-- Medical Tab -->
+                    <div class="tab-pane fade" id="medical" role="tabpanel" aria-labelledby="medical-tab">
+                        <div class="form-group">
+                            <label for="diagnosisDate">Diagnosis Date:</label>
+                            <input type="date" class="form-control" id="diagnosisDate" name="diagnosisDate" required>
+                            <span class="tooltip-icon" data-toggle="tooltip" data-placement="top" title="When were you diagnosed with diabetes?">?</span>
+                        </div>
+                        <div class="form-group">
+                            <label for="bgl">Blood Glucose Levels:</label>
+                            <input type="number" class="form-control" id="bgl" name="bloodglucoselevels" required min="40" max="600">
+                        </div>
+                        <div class="form-group">
+                            <label for="omc">Other Medical Conditions:</label>
+                            <textarea class="form-control" id="omc" name="otherConditions" rows="4" placeholder="Enter any other health conditions here..."></textarea>
+                        </div>
+                    </div>
+
+                    <!-- Lifestyle Tab -->
+                    <div class="tab-pane fade" id="lifestyle" role="tabpanel" aria-labelledby="lifestyle-tab">
+                        <div class="form-group">
+                            <label>Dietary Preferences:</label>
+                            <div class="form-group">                          
+                                <div class="radio-group" id="dietradio" style="display: inline-flex;">
+                                    <input type="radio" id="vegetarian" name="diet" value="vegetarian">
+                                    <label for="male">Vegetarian</label>
+                                    <input type="radio" id="vegan" name="diet" value="vegan">
+                                    <label for="female">Vegan</label>
+                                    <input type="radio" id="glutenFree" name="diet" value="glutenFree">
+                                    <label for="other">GlutenFree</label>
+                                    <input type="radio" id="kosher" name="diet" value="kosher">
+                                    <label for="other">Kosher</label>
+                                    <input type="radio" id="halal" name="diet" value="halal">
+                                    <label for="other">Halal</label>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="pal">Physical activity level:</label>
+                            <input type="number" class="form-control" id="pal" name="physicalactivitylevel" required min="1" max="5">
+                        </div>
+                        <div class="form-group">
+                            <label for="weight">Weight:</label>
+                            <input type="number" class="form-control" id="weight" name="weight" required min="20" max="300">
+                        </div>
+                        <div class="form-group">
+                            <label for="height">Height:</label>
+                            <input type="number" class="form-control" id="height" name="height" required min="50" max="250">
+                        </div>
+                    </div>
+
+                    <!-- Goals & Preferences Tab -->
+                    <div class="tab-pane fade" id="goals" role="tabpanel" aria-labelledby="goals-tab">
+                        <div class="form-group">
+                            <label for="mg">Management Goals:</label>
+                            <textarea class="form-control" id="mg" name="managementgoals" rows="4" placeholder="Enter your management goals..."></textarea>
+                        </div>
+                        <div class="form-group" id="Learningpreferences">
+                            <fieldset>
+                                <legend>Learning Preferences:</legend>
+                                
+                                <label for="videos">
+                                <input type="checkbox" id="videos" name="learningpreferences" value="videos">
+                                Videos
+                                </label>
+                                
+                                <label for="articles">
+                                <input type="checkbox" id="articles" name="learningpreferences" value="articles">
+                                Articles
+                                </label>
+            
+                                <label for="infographics">
+                                    <input type="checkbox" id="infographics" name="learningpreferences" value="infographics">
+                                    Infographics
+                                </label>
+                            </fieldset>
+                        </div>
+
+                <!-- Submit Button -->
+                <div class="form-group text-center">
+                    <button type="submit" class="btn btn-custom">Submit Registration</button>
                 </div>
+            </form>
         </div>
-        <div class="form-group">
-                <a href="#diagnosisDate" class="btn btn-next">Next</a>
-        </div>  
-    </section>
-    <section id="medical" class="form-section">
-        <div class="section-header">
-            <h2>Medical Information</h2>
-        </div>
-        <div class="form-group">
-                <label for="diagnosisDate">Diagnosis Date:</label>
-                <input type="date" id="diagnosisDate" name="diagnosisDate" required>
-                <span class="tooltip-icon" data-tooltip="When were you diagnosed with diabetes?">?</span>
-        </div>
-        <div class="form-group">
-                <label for="bgl">Blood Glucose Levels:</label>
-                <input type="number" id="bloodglucoselevels" name="bloodglucoselevels" required min="0">
-        </div>
-        <div class="form-group">
-                <label for="omc">Other Medical Conditions:</label>
-                <textarea id="otherConditions" name="otherConditions" rows="4" cols="50" placeholder="Enter any other health conditions here..."></textarea>
-         </div>
-
-            
-            <div class="form-group">
-                <a href="#dietradio" class="btn btn-next">Next</a>
-            </div>
-    
-    </section>
-    <section id="lifestyle" class="form-section">
-        <div class="section-header">
-            <h2>Lifestyle Information</h2>
-        </div>
-    
-            <div class="form-group">
-                <label>Dietary Preferences:</label>
-                <div class="radio-group" id="dietradio" style="display: inline-flex;">
-                    <input type="radio" id="vegetarian" name="diet" value="vegetarian">
-                    <label for="male">Vegetarian</label>
-                    <input type="radio" id="vegan" name="diet" value="vegan">
-                    <label for="female">Vegan</label>
-                    <input type="radio" id="glutenFree" name="diet" value="glutenFree">
-                    <label for="other">GlutenFree</label>
-                    <input type="radio" id="kosher" name="diet" value="kosher">
-                    <label for="other">Kosher</label>
-                    <input type="radio" id="halal" name="diet" value="halal">
-                    <label for="other">Halal</label>
-                </div>
-            </div>
-            
-            <div class="form-group">
-                <label for="pal">Physical activity level:</label>
-                <input type="number" id="pphysicalactivitylevelal" name="physicalactivitylevel" required min="0">
-            </div>
-
-            <div class="form-group">
-                <label for="weight">Weight:</label>
-                <input type="number" id="weight" name="weight" required min="0">
-            </div>
-
-            <div class="form-group">
-                <label for="height">Height:</label>
-                <input type="number" id="height" name="height" required min="0">
-            </div>
-
-            
-            <div class="form-group">
-                <a href="#mg" class="btn btn-next">Next</a>
-            </div>
-
-    </section>
-    <section id="goals" class="form-section" >
-        <div class="section-header">
-            <h2>Goals and Preferences</h2>
-        </div>
-        
-            <div class="form-group">
-                <label for="mg">Management Goals:</label>
-                <textarea id="mg" name="managementgoals" rows="4" cols="50" placeholder="•	Management Goals: Such as lowering blood sugar, losing weight, increasing physical activity, or improving diet write here..."></textarea>
-
-            </div>
-
-            <div class="form-group" id="Learningpreferences">
-                <fieldset>
-                    <legend>Learning Preferences:</legend>
-                    
-                    <label for="videos">
-                    <input type="checkbox" id="videos" name="learningpreferences" value="videos">
-                    Videos
-                    </label>
-                    
-                    <label for="articles">
-                    <input type="checkbox" id="articles" name="learningpreferences" value="articles">
-                    Articles
-                    </label>
-
-                    <label for="infographics">
-                        <input type="checkbox" id="infographics" name="learningpreferences" value="infographics">
-                        Infographics
-                    </label>
-                </fieldset>
-            </div>
-        
-    </section>
-    <div class="form-group">
-        <button type="submit">Submit</button>
     </div>
 
-</form>  
-<script>
-	document.addEventListener('DOMContentLoaded', function() {
-    const navLinks = document.querySelectorAll('.slider-nav .nav-link');
+    <!-- Bootstrap JS for interactivity -->
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 
-    navLinks.forEach(link => {
-        link.addEventListener('click', function() {
-            document.querySelector('.nav-link.active')?.classList.remove('active');
-            link.classList.add('active');
-        });
-    });
+    <script>
+        // Initialize tooltips
+        $(function () {
+            $('[data-toggle="tooltip"]').tooltip()
+        })
 
-	var tooltipIcons = document.querySelectorAll('.tooltip-icon');
-    tooltipIcons.forEach(function(icon) {
-        icon.addEventListener('click', function() {
-            // Code to show the tooltip text
-            alert(icon.getAttribute('data-tooltip'));
+        document.addEventListener('DOMContentLoaded', function() {
+            const navLinks = document.querySelectorAll('.slider-nav .nav-link');
+        
+            // Set maximum date for diagnosisDate
+            document.getElementById('diagnosisDate').max = new Date().toISOString().split('T')[0];
+        
+            navLinks.forEach(link => {
+                link.addEventListener('click', function() {
+                    document.querySelector('.nav-link.active')?.classList.remove('active');
+                    link.classList.add('active');
+                });
+            });
+        
+            document.getElementById('fullName').addEventListener('input', function() {
+                if (this.value.length > 0) {
+                    this.style.borderColor = '#4CAF50'; // Green border for input content
+                } else {
+                    this.style.borderColor = '#ccc'; // Default border color
+                }
+            });
+        
+            var tooltipIcons = document.querySelectorAll('.tooltip-icon');
+            tooltipIcons.forEach(function(icon) {
+                icon.addEventListener('click', function() {
+                    // Code to show the tooltip text
+                    alert(icon.getAttribute('data-tooltip'));
+                });
+            });
         });
-    });
-});
-</script>
+        
+    </script>
 </body>
 </html>
-

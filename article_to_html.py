@@ -1,7 +1,10 @@
 import random
 import string
-from jinja2 import Template,Environment, FileSystemLoader
+from jinja2 import Template
 
+def read_file(file_path):
+    with open(file_path, 'r') as file:
+        return file.read()
 
 def create_div_ids(data):
      letters = string.ascii_uppercase
@@ -11,38 +14,121 @@ def create_div_ids(data):
      return data
 
 def json_to_html(data):
-    print(data,type(data))
+    
     # Load JSON data
     # data = json.loads(json_data)
     data=create_div_ids(data)
-    # print(data)
+    
+
+   
+
+
     html_template = """
     <!DOCTYPE html>
     <html>
     <head>
         <title>{{ title }}</title>
-        {% include 'header.html' %}
-     
+       
+     <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            line-height: 1.6;
+            color: #333;
+            margin: 0;
+            padding: 0;
+            background-color: #f5f5f5;
+        }
+
+        header {
+            background-color: #222;
+            color: #fff;
+            padding: 10px;
+            text-align: center;
+        }
+
+        nav {
+            background-color: #333;
+            padding: 10px;
+            text-align: center;
+        }
+
+        nav a {
+            color: #fff;
+            text-decoration: none;
+            margin: 0 15px;
+            font-size: 18px;
+        }
+
+        nav a:hover {
+            text-decoration: underline;
+        }
+
+        main {
+            max-width: 800px;
+            margin: 20px auto;
+            padding: 20px;
+            background-color: #fff;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        h1, h2, h3 {
+            color: #333;
+        }
+
+        h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+        }
+
+        h2 {
+            font-size: 2em;
+            margin-top: 20px;
+            margin-bottom: 10px;
+        }
+
+        h3 {
+            font-size: 1.5em;
+            margin-top: 15px;
+            margin-bottom: 5px;
+        }
+
+        p {
+            margin-bottom: 20px;
+        }
+
+        em {
+            color: #555;
+            font-style: italic;
+        }
+
+        div {
+            text-align: justify;
+        }
+    </style>
     </head>
     <body>
+    <div class="page-heading text-center">
 
-    <div class="row ">
- 		<div class="col-md-12 fadeIn animate-onscroll">
-            <h2 class="title-style-2"> Tabs <span class="title-under"></span></h2>
-                <div role="tabpanel">
-                    <ul class="nav nav-tabs" role="tablist">
-    					<li role="presentation" class="active"><a href="#{{ sub_heading_tag_1 }}" aria-controls="home" role="tab" data-toggle="tab">{{sub_heading_1}}</a></li>
-    					<li role="presentation"><a href="#{{ sub_heading_tag_2 }}" aria-controls="profile" role="tab" data-toggle="tab">#{{ sub_heading_tag_2 }}</a></li>
-    					<li role="presentation"><a href="#{{ sub_heading_tag_3 }}" aria-controls="messages" role="tab" data-toggle="tab">{{ sub_heading_tag_3 }}</a></li>
-    					<li role="presentation"><a href="#{{ sub_heading_tag_4 }}" aria-controls="settings" role="tab" data-toggle="tab">{{ sub_heading_tag_4 }}</a></li>
-                        <li role="presentation"><a href="#{{ sub_heading_tag_5 }}" aria-controls="settings" role="tab" data-toggle="tab">{{ sub_heading_tag_5 }}</a></li>
-                        <li role="presentation"><a href="#{{ sub_heading_tag_6 }}" aria-controls="settings" role="tab" data-toggle="tab">{{ sub_heading_tag_6 }}</a></li>
-                        <li role="presentation"><a href="#{{ sub_heading_tag_7 }}" aria-controls="settings" role="tab" data-toggle="tab">{{ sub_heading_tag_7 }}</a></li>
-    				</ul>
-                </div>
-        </div>
-    </div>
+		<div class="container zoomIn animated">
+			
+			<h1 class="page-title">ARTICLES <span class="title-under"></span></h1>
+			<p class="page-description">
+				ARTICLES TO KEEP YOU UPDATED ABOUT DIABETES
+			</p>
+			
+		</div>
 
+	</div>
+
+    <nav>
+        <a href=#{{ sub_heading_tag_1 }}>{{sub_heading_1}}</a>
+        <a href=#{{ sub_heading_tag_2 }}>{{sub_heading_2}}</a>
+        <a href=#{{ sub_heading_tag_3 }}>{{sub_heading_3}}</a>
+        <a href=#{{ sub_heading_tag_4 }}>{{sub_heading_4}}</a>
+        <a href=#{{ sub_heading_tag_5 }}>{{sub_heading_5}}</a>
+        <a href=#{{ sub_heading_tag_6 }}>{{sub_heading_6}}</a>
+        <a href=#{{ sub_heading_tag_7 }}>{{sub_heading_7}}</a>
+    </nav>
     <main>
             <h2>{{ sub_topic_1 }}</h2>
             <p><em>Author: {{author}}</em></p>
@@ -118,7 +204,6 @@ def json_to_html(data):
 
     # Create a Jinja2 template object
     template = Template(html_template)
-    print(template)
 
     # Render HTML with JSON data
     html_output = template.render(title=data["sub_topic_1"],
@@ -154,48 +239,6 @@ def json_to_html(data):
                                   sub_heading_tag_1=data["sub_heading_tag_1"])
     # print(html_output)
     return html_output
-
-
-
-
-
-
-
-# <div class="row ">
-
-# 				<div class="col-md-12 fadeIn animate-onscroll">
-
-# 					<h2 class="title-style-2"> Tabs <span class="title-under"></span></h2>
-
-					
-# 						<div role="tabpanel">
-
-# 							  <!-- Nav tabs -->
-# 							  <ul class="nav nav-tabs" role="tablist">
-# 							    <li role="presentation" class="active"><a href="#home" aria-controls="home" role="tab" data-toggle="tab">Home</a></li>
-# 							    <li role="presentation"><a href="#profile" aria-controls="profile" role="tab" data-toggle="tab">Profile</a></li>
-# 							    <li role="presentation"><a href="#messages" aria-controls="messages" role="tab" data-toggle="tab">Messages</a></li>
-# 							    <li role="presentation"><a href="#settings" aria-controls="settings" role="tab" data-toggle="tab">Settings</a></li>
-# 							  </ul>
-
-# 							  <!-- Tab panes -->
-# 							  <div class="tab-content">
-# 							    <div role="tabpanel" class="tab-pane active" id="home">
-# 							    	Lorem ipsum dolor sit amet, consectetur adipisicing elit. In consequatur mollitia, libero quisquam impedit obcaecati, dignissimos, eum similique minima ab amet eos sequi distinctio qui modi? Possimus quos, fugit quia.</div>
-# 							    <div role="tabpanel" class="tab-pane" id="profile">
-# 							    	Lorem ipsum dolor sit amet, consectetur adipisicing elit. Molestiae aut culpa a commodi. Quidem asperiores aliquid sequi incidunt quas soluta eum ab fugiat deleniti in at iste, illum ipsam nisi.</div>
-# 							    <div role="tabpanel" class="tab-pane" id="messages">
-# 							    	Lorem ipsum dolor sit amet, consectetur adipisicing elit. Ex aliquam corrupti quibusdam nostrum, aspernatur iure illo, alias vitae, reiciendis culpa explicabo minus iusto ipsum cum tempore incidunt iste praesentium nihil.</div>
-# 							    <div role="tabpanel" class="tab-pane" id="settings">
-# 							    	Lorem ipsum dolor sit amet, consectetur adipisicing elit. Ea ducimus ullam distinctio fugiat voluptates! Vero quis adipisci asperiores aliquam ullam doloremque dolor, reprehenderit, accusamus nisi ut eveniet quas reiciendis dolore.</div>
-# 							  </div>
-
-# 						</div>
-
-# 						<p></p>
-					
-
-# 				</div>
 
 # Example JSON data
 # json_data_example ={

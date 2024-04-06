@@ -63,11 +63,9 @@
                     <li><a>{% if 'user' in session %}
                         Hello, {{ session.user.name }}
                     {% endif %}</a>
-                        
-                    
                     </li>
-                    <li><a class="is-active" href="/home">Home</a></li>
-                    <li><a  href="/articles">Articles</a></li>
+                    <li><a class="{{ 'is-active' if request.path == '/home' else '' }}" href="/home">Home</a></li>
+                    <li><a class="{{ 'is-active' if request.path == '/articles' else '' }}" href="/articles">Articles</a></li>
                     
                     <!-- <li class="has-child"><a href="#">CAUSES</a>
 
@@ -81,14 +79,14 @@
                     </li> -->
                     
                     <li>{% if 'user' not in session %}
-                      <a href="/loginpage">Login</a>
+                      <a class="{{ 'is-active' if request.path == '/loginpage' else '' }}" href="/loginpage">Login</a>
                     {% endif %}</li>
 
                     
 
                     <li>{% if 'user' in session %}
                         <li class="has-child">
-                         <a> <img src="{{ url_for('static', filename='assets/images/user.png') }}" alt="Chatbot Logo" id="chatbot-logo-img" width="45" height="35"></a>
+                         <a > <img src="{{ url_for('static', filename='assets/images/user.png') }}" alt="Chatbot Logo" id="chatbot-logo-img" width="45" height="35"></a>
                           <ul class="submenu">
                             <li class="submenu-item"><a href="/userprofile">Profile</a></li>
                             <li class="submenu-item"><a href="/logout">Logout </a></li>
