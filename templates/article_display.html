@@ -1,0 +1,14 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    {% include 'header.html' %}
+</head>
+<body>
+    <div id="article-content">
+        <!-- Dynamically insert the article HTML here -->
+        {{ article_html|safe }}
+    </div>
+    
+    {% include 'footer.html' %}
+</body>
+</html>

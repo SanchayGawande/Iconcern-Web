@@ -18,93 +18,66 @@ def json_to_html(data):
     # Load JSON data
     # data = json.loads(json_data)
     data=create_div_ids(data)
-    
+    # image_path = 'assets/images/link_images/' + data.get('image_filename', 'about-us.jpg')
 
-   
-
-
+    # Render HTML with data
     html_template = """
     <!DOCTYPE html>
     <html>
     <head>
         <title>{{ title }}</title>
-       
-     <style>
-        body {
-            font-family: 'Arial', sans-serif;
-            line-height: 1.6;
-            color: #333;
-            margin: 0;
-            padding: 0;
-            background-color: #f5f5f5;
-        }
+    <style>
+    .navbar-transparent {
+    background-color: rgba(255, 255, 255, 0.8); /* Light background for readability */
+    backdrop-filter: blur(10px); /* Blur effect for modern look */
+    border-bottom: 1px solid #ddd; /* Subtle separation from content */
+}
 
-        header {
-            background-color: #222;
-            color: #fff;
-            padding: 10px;
-            text-align: center;
-        }
+          .navbar-transparent {
+    background-color: transparent;
+    color: #333;
+    font-size: 15px;
+    font-family: "Open Sans", sans-serif;
+    padding: 15px 0;
+    text-align: center;
+    display: flex;
+    justify-content: center; /* This will center your menu if there's space available */
+    align-items: center; /* This will vertically center align the items */
+    width: 100%;
+}
 
-        nav {
-            background-color: #333;
-            padding: 10px;
-            text-align: center;
-        }
+.navbar-transparent ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex; /* This will layout your list items in a row instead of a column */
+    align-items: center; /* Align items vertically */
+}
 
-        nav a {
-            color: #fff;
-            text-decoration: none;
-            margin: 0 15px;
-            font-size: 18px;
-        }
+.navbar-transparent ul li {
+    margin-right: 20px;
+}
 
-        nav a:hover {
-            text-decoration: underline;
-        }
+.navbar-transparent ul li:last-child {
+    margin-right: 0; /* Removes the margin from the last item */
+}
 
-        main {
-            max-width: 800px;
-            margin: 20px auto;
-            padding: 20px;
-            background-color: #fff;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-        }
+.navbar-transparent ul li a {
+    color: #333;
+    text-decoration: none;
+    transition: color 0.3s;
+    padding: 5px 10px; /* Adds some padding around the links */
+    border-radius: 5px; /* Optional: adds rounded corners */
+}
 
-        h1, h2, h3 {
-            color: #333;
-        }
+.navbar-transparent ul li a:hover {
+    color: #000;
+    background-color: rgba(0, 0, 0, 0.1); /* Adds a slight background on hover */
+}
 
-        h1 {
-            font-size: 2.5em;
-            margin-bottom: 10px;
-        }
 
-        h2 {
-            font-size: 2em;
-            margin-top: 20px;
-            margin-bottom: 10px;
-        }
-
-        h3 {
-            font-size: 1.5em;
-            margin-top: 15px;
-            margin-bottom: 5px;
-        }
-
-        p {
-            margin-bottom: 20px;
-        }
-
-        em {
-            color: #555;
-            font-style: italic;
-        }
-
-        div {
-            text-align: justify;
-        }
-    </style>
+    </style>  
+     
     </head>
     <body>
     <div class="page-heading text-center">
@@ -120,19 +93,37 @@ def json_to_html(data):
 
 	</div>
 
-    <nav>
-        <a href=#{{ sub_heading_tag_1 }}>{{sub_heading_1}}</a>
-        <a href=#{{ sub_heading_tag_2 }}>{{sub_heading_2}}</a>
-        <a href=#{{ sub_heading_tag_3 }}>{{sub_heading_3}}</a>
-        <a href=#{{ sub_heading_tag_4 }}>{{sub_heading_4}}</a>
-        <a href=#{{ sub_heading_tag_5 }}>{{sub_heading_5}}</a>
-        <a href=#{{ sub_heading_tag_6 }}>{{sub_heading_6}}</a>
-        <a href=#{{ sub_heading_tag_7 }}>{{sub_heading_7}}</a>
-    </nav>
+   
+
+     <nav class="navbar navbar-transparent">
+          <div class="container">
+               <ul>
+                    {% if sub_heading_1 %}<li><a href=#{{ sub_heading_tag_1 }}>{{sub_heading_1}}</a></li>{% endif %}
+                    {% if sub_heading_2 %}<li><a href=#{{ sub_heading_tag_2 }}>{{sub_heading_2}}</a></li>{% endif %}
+                    {% if sub_heading_3 %}<li><a href=#{{ sub_heading_tag_3 }}>{{sub_heading_3}}</a></li>{% endif %}
+                    {% if sub_heading_4 %}<li><a href=#{{ sub_heading_tag_4 }}>{{sub_heading_4}}</a></li>{% endif %}
+                    {% if sub_heading_5 %}<li><a href=#{{ sub_heading_tag_5 }}>{{sub_heading_5}}</a></li>{% endif %}
+                    {% if sub_heading_6 %}<li><a href=#{{ sub_heading_tag_6 }}>{{sub_heading_6}}</a></li>{% endif %}
+                    {% if sub_heading_7 %}<li><a href=#{{ sub_heading_tag_7 }}>{{sub_heading_7}}</a></li>{% endif %}
+                    <!-- Add more links as needed -->
+               </ul>
+          </div>
+     </nav>
     <main>
-            <h2>{{ sub_topic_1 }}</h2>
-            <p><em>Author: {{author}}</em></p>
-            <p>{{ sub_topic_1_description }}</p>
+    <div class="main-container">
+		<div class="container">
+			<div class="row fadeIn animated">
+               <div>
+                    <img src="https://iconcernbucket.s3.us-east-2.amazonaws.com/link_images/{{image_filename}}" style="width: 1200px; height: 600px; border-radius: 12px; margin-top: 20px; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1), 0 6px 20px rgba(0, 0, 0, 0.19);">
+               </div>
+
+                <div >
+                    <h1 >{{ title }}</h1>
+                    <h2 class="title-style-2">{{ sub_topic_1 }}<span class="title-under"></span></h2>
+                    <p><em>Author: {{author}}</em></p>
+                    {% if sub_topic_1_description %}<p>{{ sub_topic_1_description }}</p>{% endif %}
+                </div>
+            </div>
 
 """
     for key, val in data.items():
@@ -141,61 +132,65 @@ def json_to_html(data):
                  continue
             if key=='sub_topic_2_description' and val is not None:
                  html_template +='''
-            <h2>{{ sub_topic_2 }}</h2>
+            <h2 class="title-style-2">{{ sub_topic_2 }}<span class="title-under"></h2>
             <p>{{ sub_topic_2_description | safe }}</p> '''
                  
             elif key=='sub_topic_3_description' and val is not None:
                  html_template +='''
-            <h2>{{ sub_topic_3 }}</h2>
+            <h2 class="title-style-2">{{ sub_topic_3 }}<span class="title-under"></h2>
             <p>{{ sub_topic_3_description | safe }}</p> ''' 
                  
             elif key=='sub_heading_1_description' and val is not None:
                  html_template +='''
             <div id={{sub_heading_tag_1}}>     
-            <h2>{{ sub_heading_1 }}</h2>
+            <h3><ul><li>{{ sub_heading_1 }}</li></ul></h3>
             <p>{{ sub_heading_1_description | safe }}</p> 
             </div>''' 
 
             elif key=='sub_heading_2_description' and val is not None:
                  html_template +='''
             <div id={{sub_heading_tag_2}}>     
-            <h3>{{ sub_heading_2 }}</h3>
+            <h3><ul><li>{{ sub_heading_2 }}</li></ul></h3>
             <p>{{ sub_heading_2_description | safe }}</p> 
             </div>''' 
                  
             elif key=='sub_heading_3_description' and val is not None:
                  html_template +='''
             <div id={{sub_heading_tag_3}}>    
-            <h3>{{ sub_heading_3 }}</h3>
+            <h3><ul><li>{{ sub_heading_3 }}</li></ul></h3>
             <p>{{ sub_heading_3_description | safe }}</p>  
             </div>''' 
 
             elif key=='sub_heading_4_description' and val is not None:
                  html_template +='''
             <div id={{sub_heading_tag_4}}> 
-            <h3>{{ sub_heading_4 }}</h3>
+            <h3><ul><li>{{ sub_heading_4 }}</li></ul></h3>
             <p>{{ sub_topic_4_description | safe }}</p> 
             </div>''' 
 
             elif key=='sub_heading_5_description' and val is not None:
                  html_template +='''
             <div id={{sub_heading_tag_5}}>    
-            <h3>{{ sub_heading_5 }}</h3>
+            <h3><ul><li>{{ sub_heading_5 }}</li></ul></h3>
             <p>{{ sub_heading_5_description | safe }}</p> 
             </div>''' 
                  
             elif key=='sub_heading_6_description' and val is not None:
                  html_template +='''
             <div id={{sub_heading_tag_6}}>    
-            <h3>{{ sub_heading_6 }}</h3>
+            <h3><ul><li>{{ sub_heading_6 }}</li></ul></h3>
             <p>{{ sub_heading_6_description | safe }}</p>  
             </div>''' 
                  
             elif key=='sub_heading_7_description' and val is not None:
                  html_template +='''
             <div id={{sub_heading_tag_7}}>    
-            <h3>{{ sub_heading_7 }}</h3>
+            <h3><ul><li>{{ sub_heading_7 }}</li></ul></h3>
             <p>{{ sub_heading_7_description | safe }}</p>  
+            </div>
+
+            
+            </div>
             </div>
             </main>
             </body>
@@ -206,7 +201,7 @@ def json_to_html(data):
     template = Template(html_template)
 
     # Render HTML with JSON data
-    html_output = template.render(title=data["sub_topic_1"],
+    html_output = template.render(title=data["topic"],
                                   author=data["author"],
                                   sub_topic_1=data["sub_topic_1"],
                                   sub_topic_1_description=data["sub_topic_1_description"],
@@ -236,7 +231,9 @@ def json_to_html(data):
                                   sub_heading_tag_4=data["sub_heading_tag_4"],
                                   sub_heading_tag_3=data["sub_heading_tag_3"],
                                   sub_heading_tag_2=data["sub_heading_tag_2"],
-                                  sub_heading_tag_1=data["sub_heading_tag_1"])
+                                  sub_heading_tag_1=data["sub_heading_tag_1"],
+                                  image_filename=data['image_filename'])
+                                  
     # print(html_output)
     return html_output
 

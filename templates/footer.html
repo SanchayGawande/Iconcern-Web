@@ -1,9 +1,48 @@
 <!DOCTYPE html>
 <html class="no-js">
+    <head><style>
+        .chatbot-popup {
+    display: none; /* Hidden by default */
+    position: fixed; /* Fixed positioning (can be bottom-right corner) */
+    right: 20px;
+    bottom: 30px;
+    z-index: 9; /* Ensure it stays on top */
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    overflow: hidden;
+        }
+    #chatbotCloseButton {
+    position: absolute;
+    top: 0;
+    right: 0;
+    padding: 5px 10px;
+    background: red;
+    color: white;
+    border: none;
+    cursor: pointer;
+}
+
+.chatbot-logo img {
+        cursor: pointer; /* Changes the cursor to a pointer to indicate it's clickable */
+        /* Add more styles as needed */
+    }
+
+/* Optional: Add more styles for the button */
+
+    </style></head>
     <body>
         <div class="chatbot-logo">
-            <img src="{{ url_for('static', filename='assets/images/chatbot.png') }}" alt="Chatbot Logo" id="chatbot-logo-img" width="50" height="50">
+            <img src="{{ url_for('static', filename='assets/images/chatbot.png') }}" alt="Chatbot Logo" id="chatbotOpenButton" width="50" height="50">
         </div>
+
+        
+
+        <!-- Chatbot container (hidden initially) -->
+        <div id="chatbotContainer" class="chatbot-popup">
+            <iframe src="http://localhost:8000/" width="350" height="430"></iframe>
+            <button id="chatbotCloseButton">Close</button>
+        </div>
+
 
         <footer class="main-footer">
 
@@ -139,6 +178,16 @@
         e.src='//www.google-analytics.com/analytics.js';
         r.parentNode.insertBefore(e,r)}(window,document,'script','ga'));
         ga('create','UA-XXXXX-X');ga('send','pageview');
+
+
+        document.getElementById('chatbotOpenButton').onclick = function() {
+            document.getElementById('chatbotContainer').style.display = 'block';
+        };
+
+        document.getElementById('chatbotCloseButton').onclick = function() {
+        document.getElementById('chatbotContainer').style.display = 'none';
+        };
+
     </script>
     </body>
 </html>

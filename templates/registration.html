@@ -3,84 +3,90 @@
 <head>
     <meta charset="UTF-8">
     <title>Registration</title>
-    <!-- Bootstrap CSS for styling -->
     <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    
     <style>
         body {
-            background-color: #1E88E5; /* Lighter blue background to match your theme */
-            display: flex; /* Use flex display to center the container vertically */
-            min-height: 100vh; /* Minimum height of 100% of the viewport */
-            margin: 0; /* Remove the default margin */
-            align-items: center; /* Align items vertically */
-            justify-content: center; /* Center content horizontally */
+            background: linear-gradient(135deg, #1E88E5 0%, #1565C0 100%);
+            font-family: 'Arial', sans-serif;
+            display: flex;
+            min-height: 100vh;
+            margin: 0;
+            align-items: center;
+            justify-content: center;
         }
         .form-container {
             background-color: #ffffff;
-            padding: 50px; /* Increased padding for more white space */
+            padding: 50px;
             border-radius: 8px;
-            box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
-            width: 90%; /* Adjusted width for more white space */
-            max-width: 1000px; /* Set a max-width to limit the size of the form */
-            margin: auto; /* Center the form in the viewport */
-            display: flex; /* Using flexbox for inner elements */
-            flex-direction: column; /* Stack the elements vertically */
-            justify-content: space-around; /* Evenly space out the flex items */
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+            width: 90%;
+            max-width: 1000px;
+            margin: auto;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-around;
+            transition: transform 0.3s ease-out;
         }
         .nav-tabs {
-            border-bottom: 4px solid #007bff;
+            border-bottom: 2px solid #007bff;
+        }
+        .nav-tabs .nav-link {
+            padding: 12px 20px;
+            margin-right: 2px;
+            border-radius: 0.25rem 0.25rem 0 0;
+            color: #007bff;
+            background-color: #e7f0fb;
+            transition: background-color 0.3s ease-in-out;
         }
         .nav-tabs .nav-item.show .nav-link, .nav-tabs .nav-link.active {
+            font-weight: bold;
             color: #007bff;
             background-color: #fff;
             border-color: #007bff #007bff #fff;
-        }
-        .nav-tabs .nav-link {
-            border: 1px solid transparent;
-            border-top-left-radius: 0.25rem;
-            border-top-right-radius: 0.25rem;
-            color: #007bff;
+            border-bottom: 3px solid #007bff;
         }
         .btn-custom {
-            background-color: #007bff; /* Blue shade for the submit button */
+            background-color: #007bff;
             color: #ffffff;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+            transition: background-color 0.3s ease-in-out, transform 0.2s ease;
         }
         .btn-custom:hover {
             background-color: #0056b3;
+            transform: translateY(-2px);
         }
-        .tooltip-icon {
-            color: #007bff; /* Blue shade for tooltip icon */
+        input[type="text"], input[type="number"], select, textarea {
+            transition: border-color 0.2s ease-in-out;
+            outline: none;
         }
-        .nav-link:hover {
-            background-color: #e7f0fb; /* Light blue background on hover */
+        input[type="text"]:focus, input[type="number"]:focus, select:focus, textarea:focus {
+            border-color: #007bff;
+            box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
         }
-        .radio-group label {
-            margin-right: 20px; /* Increased space between each radio button */
-            display: inline-block;
+        .tab-content .tab-pane {
+            padding: 20px;
+            background-color: #f8f9fa;
+            border: 1px solid #dee2e6;
+            border-top: none;
+            border-radius: 0 0 0.25rem 0.25rem;
         }
-        .form-group .radio-group {
-            padding-bottom: 15px;
-        }
-        label {
-            display: block; /* Make sure labels are block-level for spacing */
-            margin-bottom: .5rem;
-        }
-        .form-check {
-            margin-bottom: 10px; /* Adjust the space between form check items */
-        }
-        .form-check label {
-            margin-bottom: 0; /* Adjust label bottom margin within form check */
-        }
-        .form-group {
-            margin-bottom: 20px; /* Increased margin-bottom for more white space */
+        @media (max-width: 768px) {
+            .nav-tabs .nav-link {
+                padding: 8px 10px;
+            }
+            .form-container {
+                padding: 20px;
+                width: 100%;
+                max-width: none;
+            }
         }
     </style>
-    
 </head>
 <body>
 
     <div class="container mt-5">
         <div class="form-container">
-            <!-- Navigation tabs for different sections of the form -->
             <ul class="nav nav-tabs" id="registrationTab" role="tablist">
                 <li class="nav-item">
                     <a class="nav-link active" id="personal-tab" data-toggle="tab" href="#personal" role="tab" aria-controls="personal" aria-selected="true">Personal Details</a>
@@ -96,10 +102,8 @@
                 </li>
             </ul>
 
-            <!-- Form content -->
             <form id="registrationForm" action="/registration" method="post">
                 <div class="tab-content" id="registrationTabContent">
-                    <!-- Personal Details Tab -->
                     <div class="tab-pane fade show active" id="personal" role="tabpanel" aria-labelledby="personal-tab">
                         <div class="form-group">
                             <label for="fullName">Full Name or Study ID:</label>
@@ -107,7 +111,7 @@
                         </div>
                         <div class="form-group">
                             <label for="age">Age:</label>
-                            <input type="number" class="form-control" id="age" name="age" required min="14" max="120">
+                            <input type="number" class="form-control" id="age" name="age" required min="14" max="120" placeholder="Above 14">
                         </div>
                         <div class="form-group">
                             <label>Gender:</label>
@@ -125,10 +129,23 @@
                                     <label class="form-check-label" for="other">Other</label>
                                 </div>
                             </div>
+                            <div class="form-group">
+                                <label for="location">Location:</label>
+                                <select class="form-control" id="location" name="location" required>
+                                    <option value="">Please select your city</option>
+                                    <option value="new_york">New York</option>
+                                    <option value="boston">Boston</option>
+                                    <option value="san_francisco">San Francisco</option>
+                                    <option value="chicago">Chicago</option>
+                                    <option value="seattle">Seattle</option>
+                                    <option value="los_angeles">Los Angeles</option> <!-- Example new city -->
+                                    <option value="miami">Miami</option> <!-- Example new city -->
+                                    <option value="las_vegas">Las Vegas</option> <!-- Example new city -->
+                                </select>
+                                
+                            </div>
                         </div>
                     </div>
-
-                    <!-- Medical Tab -->
                     <div class="tab-pane fade" id="medical" role="tabpanel" aria-labelledby="medical-tab">
                         <div class="form-group">
                             <label for="diagnosisDate">Diagnosis Date:</label>
@@ -137,48 +154,44 @@
                         </div>
                         <div class="form-group">
                             <label for="bgl">Blood Glucose Levels:</label>
-                            <input type="number" class="form-control" id="bgl" name="bloodglucoselevels" required min="40" max="600">
+                            <input type="number" class="form-control" id="bgl" name="bloodglucoselevels" required min="40" max="600" placeholder="Between 40 to 600">
                         </div>
                         <div class="form-group">
                             <label for="omc">Other Medical Conditions:</label>
                             <textarea class="form-control" id="omc" name="otherConditions" rows="4" placeholder="Enter any other health conditions here..."></textarea>
                         </div>
                     </div>
-
-                    <!-- Lifestyle Tab -->
                     <div class="tab-pane fade" id="lifestyle" role="tabpanel" aria-labelledby="lifestyle-tab">
                         <div class="form-group">
                             <label>Dietary Preferences:</label>
-                            <div class="form-group">                          
+                            <div class="form-group">
                                 <div class="radio-group" id="dietradio" style="display: inline-flex;">
                                     <input type="radio" id="vegetarian" name="diet" value="vegetarian">
-                                    <label for="male">Vegetarian</label>
+                                    <label for="vegetarian">Vegetarian</label>
                                     <input type="radio" id="vegan" name="diet" value="vegan">
-                                    <label for="female">Vegan</label>
+                                    <label for="vegan">Vegan</label>
                                     <input type="radio" id="glutenFree" name="diet" value="glutenFree">
-                                    <label for="other">GlutenFree</label>
+                                    <label for="glutenFree">Gluten-Free</label>
                                     <input type="radio" id="kosher" name="diet" value="kosher">
-                                    <label for="other">Kosher</label>
+                                    <label for="kosher">Kosher</label>
                                     <input type="radio" id="halal" name="diet" value="halal">
-                                    <label for="other">Halal</label>
+                                    <label for="halal">Halal</label>
                                 </div>
                             </div>
                         </div>
                         <div class="form-group">
-                            <label for="pal">Physical activity level:</label>
-                            <input type="number" class="form-control" id="pal" name="physicalactivitylevel" required min="1" max="5">
+                            <label for="pal">Physical Activity Level:</label>
+                            <input type="number" class="form-control" id="pal" name="physicalactivitylevel" required min="1" max="5" placeholder="5 - most active to 1 - not active">
                         </div>
                         <div class="form-group">
                             <label for="weight">Weight:</label>
-                            <input type="number" class="form-control" id="weight" name="weight" required min="20" max="300">
+                            <input type="number" class="form-control" id="weight" name="weight" required min="20" max="300" placeholder="kgs">
                         </div>
                         <div class="form-group">
                             <label for="height">Height:</label>
-                            <input type="number" class="form-control" id="height" name="height" required min="50" max="250">
+                            <input type="number" class="form-control" id="height" name="height" required min="50" max="250" placeholder="in cm">
                         </div>
                     </div>
-
-                    <!-- Goals & Preferences Tab -->
                     <div class="tab-pane fade" id="goals" role="tabpanel" aria-labelledby="goals-tab">
                         <div class="form-group">
                             <label for="mg">Management Goals:</label>
@@ -187,27 +200,21 @@
                         <div class="form-group" id="Learningpreferences">
                             <fieldset>
                                 <legend>Learning Preferences:</legend>
-                                
                                 <label for="videos">
-                                <input type="checkbox" id="videos" name="learningpreferences" value="videos">
-                                Videos
+                                <input type="checkbox" id="videos" name="learningpreferences" value="videos"> Videos
                                 </label>
-                                
                                 <label for="articles">
-                                <input type="checkbox" id="articles" name="learningpreferences" value="articles">
-                                Articles
+                                <input type="checkbox" id="articles" name="learningpreferences" value="articles"> Articles
                                 </label>
-            
                                 <label for="infographics">
-                                    <input type="checkbox" id="infographics" name="learningpreferences" value="infographics">
-                                    Infographics
+                                <input type="checkbox" id="infographics" name="learningpreferences" value="infographics"> Infographics
                                 </label>
                             </fieldset>
                         </div>
-
-                <!-- Submit Button -->
-                <div class="form-group text-center">
-                    <button type="submit" class="btn btn-custom">Submit Registration</button>
+                    </div>
+                    <div class="form-group text-center">
+                        <button type="submit" class="btn btn-custom">Submit Registration</button>
+                    </div>
                 </div>
             </form>
         </div>
@@ -217,12 +224,10 @@
     <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
-
     <script>
-        // Initialize tooltips
         $(function () {
             $('[data-toggle="tooltip"]').tooltip()
-        })
+        });
 
         document.addEventListener('DOMContentLoaded', function() {
             const navLinks = document.querySelectorAll('.slider-nav .nav-link');
@@ -253,7 +258,7 @@
                 });
             });
         });
-        
     </script>
 </body>
 </html>
+

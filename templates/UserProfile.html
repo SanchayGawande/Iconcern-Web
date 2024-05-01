@@ -31,16 +31,12 @@
 	</style>
 <body>
     <div class="page-heading text-center">
-
-		<div class="container zoomIn animated">
-			
+		<div class="container zoomIn animated">			
 			<h1 class="page-title">PROFILE <span class="title-under"></span></h1>
 			<p class="page-description">
 				KEEP YOUR PROFILE UP TO DATE
-			</p>
-			
+			</p>	
 		</div>
-
 	</div>
 
 	<div class="main-container">
@@ -68,21 +64,26 @@
 							<div class="tab-content">
 								
 								<div role="tabpanel" class="tab-pane active" id="personalDetails">
-									
+									<div class="section-header" >
+										<h2>Personal Information</h2>
+									</div>
 									<section id="personalDetails" class="form-section" >
-										<div class="section-header" >
-											<h2>Personal Information</h2>
-										</div>
+										
 										<div class="form-group">
+											<div class="input-box">
 												<label for="fullName">Full Name or Study ID:</label>
 												<input type="text" id="fullName" name="fullName" required>
+											</div>
 										</div>
 								
 										<div class="form-group">
+											<div class="input-box">
 												<label for="age">Age:</label>
 												<input type="number" id="age" name="age" required min="0">
+											</div>
 										</div>
 										<div class="form-group">
+											<div class="input-box">
 												<label>Gender:</label>
 												<div class="radio-group">
 													<input type="radio" id="male" name="gender" value="male">
@@ -92,43 +93,48 @@
 													<input type="radio" id="other" name="gender" value="other">
 													<label for="other">Other</label>
 												</div>
+											</div>
 										</div>
 										 
 									</section>	
 								</div>
 								<div role="tabpanel" class="tab-pane" id="medicalinformation">
-									
+									<div class="section-header">
+										<h2>Medical Information</h2>
+									</div>
 									<section id="medicalinformation" class="form-section">
-										<div class="section-header">
-											<h2>Medical Information</h2>
-										</div>
+										
 										<div class="form-group">
+											<div class="input-box">
 												<label for="diagnosisDate">Diagnosis Date:</label>
 												<input type="date" id="diagnosisDate" name="diagnosisDate" required>
-												<span class="tooltip-icon" data-tooltip="When were you diagnosed with diabetes?">?</span>
+											</div>
 										</div>
 										<div class="form-group">
+											<div class="input-box">
 												<label for="bgl">Blood Glucose Levels:</label>
 												<input type="number" id="bloodglucoselevels" name="bloodglucoselevels" required min="0">
+											</div>
 										</div>
 										<div class="form-group">
+											<div class="input-box">
 												<label for="omc">Other Medical Conditions:</label>
 												<textarea id="otherConditions" name="otherConditions" rows="4" cols="50" placeholder="Enter any other health conditions here..."></textarea>
+											</div>
 										 </div>
-								
-								
-									
 									</section>
 								</div>
 							
 								
 								<div role="tabpanel" class="tab-pane" id="lifestyle">
+									<div class="section-header">
+										<h2>Lifestyle Information</h2>
+									</div>
 									<section id="lifestyle" class="form-section">
-										<div class="section-header">
-											<h2>Lifestyle Information</h2>
-										</div>
+										
 									
 											<div class="form-group">
+												<div class="input-box">
 												<label>Dietary Preferences:</label>
 												<div class="radio-group" id="dietradio" style="display: inline-flex;">
 													<input type="radio" id="vegetarian" name="diet" value="vegetarian">
@@ -142,41 +148,52 @@
 													<input type="radio" id="halal" name="diet" value="halal">
 													<label for="other">Halal</label>
 												</div>
+												</div>
 											</div>
 											
 											<div class="form-group">
+												<div class="input-box">
 												<label for="pal">Physical activity level:</label>
 												<input type="number" id="physicalactivitylevel" name="physicalactivitylevel" required min="0">
+												</div>
 											</div>
 								
 											<div class="form-group">
+												<div class="input-box">
 												<label for="weight">Weight:</label>
 												<input type="number" id="weight" name="weight" required min="0">
+												</div>
 											</div>
 								
 											<div class="form-group">
+												<div class="input-box">
 												<label for="height">Height:</label>
 												<input type="number" id="height" name="height" required min="0">
+												</div>
 											</div>
 								
 								
 									</section>	
 								</div>
 								<div role="tabpanel" class="tab-pane" id="goals">
+									<div class="section-header">
+										<h2>Goals and Preferences</h2>
+									</div>
 									<section id="goals" class="form-section" >
-										<div class="section-header">
-											<h2>Goals and Preferences</h2>
-										</div>
+										
 										
 											<div class="form-group">
+												<div class="input-box">
 												<label for="mg">Management Goals:</label>
 												<textarea id="managementgoals" name="managementgoals" rows="4" cols="50" placeholder="•	Management Goals: Such as lowering blood sugar, losing weight, increasing physical activity, or improving diet write here..."></textarea>
+												</div>
 								
 											</div>
 								
 											<div class="form-group" id="Learningpreferences">
+												<div class="input-box">
 												<fieldset>
-													<legend>Learning Preferences:</legend>
+													<label>Learning Preferences:</label>
 													
 													<label for="videos">
 													<input type="checkbox" id="videos" name="learningpreferences" value="videos">
@@ -193,6 +210,7 @@
 														Infographics
 													</label>
 												</fieldset>
+												</div>
 											</div>
 										
 									</section>	

@@ -1,8 +1,5 @@
-from flask import Flask, render_template, request,json,jsonify,send_file,session,send_from_directory,redirect, flash
-from flask import Flask, render_template, request, jsonify, session, redirect, url_for
+from flask import Flask, render_template, request,json,jsonify,send_file,session,send_from_directory,redirect
 from chatgpt import callgpt_chat
-from flask_mail import Mail, Message
-from itsdangerous import URLSafeTimedSerializer, SignatureExpired, BadSignature
 #from form_parser import change_form_submit_url
 from article_to_html import json_to_html
 from pymongo import MongoClient
@@ -27,40 +24,41 @@ import threading
 import requests
 import re
 import base64
+from bson import SON
+from flask import Flask, render_template, request,json,jsonify,send_file,session,send_from_directory,redirect, redirect, url_for, flash
+from flask_mail import Mail, Message
+from itsdangerous import URLSafeTimedSerializer, SignatureExpired, BadSignature
+from article_to_html import json_to_html
+from pymongo import MongoClient
+from bson import ObjectId
+import urllib
+import pymongo
+from datetime import datetime
+from flask_cors import CORS
+from passlib.hash import sha256_crypt
+from flask_login import LoginManager,login_user,login_required,logout_user
+from bs4 import BeautifulSoup
+from models import User
+from functools import wraps
+import pandas as pd
+import firebase_admin
+from firebase_admin import credentials, auth
+from flask import Flask
+from flask_cors import CORS
 
-
-
-# DATABASES = {
-#     'default': {
-#         'ENGINE': 'djongo',
-#         'NAME': 'sugarsense',
-#         'ENFORCE_SCHEMA': False,
-#         'CLIENT': {
-#             'host': 'mongodb+srv://krishnateja:Vg3cGorqg4AInMYh@sugarsense.hmv30yx.mongodb.net/?retryWrites=true&w=majority',
-#             'username': 'krishnateja',
-#             'password': 'Vg3cGorqg4AInMYh',
-#             'authMechanism': 'SCRAM-SHA-1',
-#             'authSource': 'admin'
-#         }
-#     }
-# }
-
-# Firebase Admin Initialization
 if not firebase_admin._apps:
-    cred = credentials.Certificate('/Users/sanchay/Downloads/diabetes_umass_nursing-Sanchay_workspace/dia-user-login-firebase-adminsdk-1o8dc-00dad728ce.json')  #change path according to your system
+
+    cred = credentials.Certificate('/Users/sanchay/Downloads/CromeDownloads/diabetes_umass_nursing_integrated/dia-user-login-firebase-adminsdk-1o8dc-00dad728ce.json')
     firebase_admin.initialize_app(cred)
 
+from flask_cors import CORS
+
+app = Flask(__name__)
+CORS(app)
 
 app = Flask(__name__,static_folder='static')
-app.secret_key = 'd21ef8b23ef23e1d5df1d7d2d037b735b0c3096fb14bcf20da5eec7e06160c33'
-app.config["SESSION_TYPE"] = "filesystem"
-
-# Set session expiration
-app.config['PERMANENT_SESSION_LIFETIME'] = timedelta(minutes=60)
-
-
 def get_host_url():
-    # Get the local host URL including the protocol, host, and port
+
     local_host_url = request.host_url
     return local_host_url 
 
@@ -78,6 +76,15 @@ mail = Mail(app)
 
 app.secret_key = 'd21ef8b23ef23e1d5df1d7d2d037b735b0c3096fb14bcf20da5eec7e06160c33'
 serializer = URLSafeTimedSerializer(app.config['SECRET_KEY'])
+app.config["SESSION_TYPE"] = "filesystem"
+
+# Set session expiration
+app.config['PERMANENT_SESSION_LIFETIME'] = timedelta(minutes=60)
+
+
+def get_host_url():
+    local_host_url = request.host_url
+    return local_host_url 
 
 
 # CORS(app,origins=[HOST_URL])
@@ -98,7 +105,6 @@ client = MongoClient(mongo_uri)  # Change the URL to your MongoDB server URL
 db = client["sugarsense"]  # Change 'mydatabase' to your database name
 collection=db["articles_articles"]
 login_manager = LoginManager(app)
-# collection.update_many({}, { '$unset': { 'article_template': "" } })
 
 db1 = client['User_database']
 users = db1.userdata
@@ -106,9 +112,9 @@ users = db1.userdata
 @login_manager.user_loader
 def load_user(user_id):
 
-    return User.get(user_id)  # Implement the get method in your User model
+    return User.get(user_id)  
 
-users_collection = db.users
+
 
 @app.route('/check')
 def check_mongodb_connection():
@@ -124,13 +130,27 @@ def check_mongodb_connection():
 @app.route('/dashboard/allvalues')
 def articledetails():
     data = collection.find()
+    
     # Convert MongoDB cursor to a list of dictionaries
     data_list = [json.loads(json.dumps(item,default=str)) for item in data]
+    
     # Return the data as JSON response
     return jsonify(data_list), 200
 
     # except Exception as e:
     #         return jsonify({"error": str(e)}), 500
+
+@app.route('/getallcategories')
+def getallcategories():
+
+    pipeline = [
+    {"$unwind": "$category"},
+    {"$group": {"_id": "$category"}},
+    
+    ]
+    unique_categories = collection.aggregate(pipeline)
+    categories_list = [cat['_id'] for cat in unique_categories]
+    return jsonify(categories_list),200
     
 @app.route('/dashboard/form-details/', methods=['POST'])
 #example for inserting collection should be replaced wth form
@@ -140,8 +160,6 @@ def store_form_details(data):
         return {"message": "Data inserted successfully", "id": str(result.inserted_id)}
     except Exception as e:
        return jsonify({"error": str(e)})
-
-
 
 
 @app.route('/dashboard/article-details/all/<article_id>', methods=['GET'])
@@ -207,8 +225,8 @@ def search_articles():
         'topic': article.get('topic', 'No Title'),#change made here as in my article card it was not able to get title
         
         'author': article.get('author', 'No Author'),
-        '_id': str(article.get('_id', ''))
-        # 'image': article.get('image', 'path/to/default/image.jpg'),  # Update this path to your default image
+        '_id': str(article.get('_id', '')),
+        'image_filename': article.get('image_filename',''),  # Update this path to your default image
         # Add any other fields you need
     } for article in results]
 
@@ -305,15 +323,14 @@ def view_user_article(article_id):
         article_data=collection.find_one(query,{'_id':0})
         html_template = BeautifulSoup(json_to_html(article_data), 'html')
         html_template = html_template.prettify()
-        print(html_template)
         update_htmlcode_of_article(ObjectId(article_id),html_template)
-    return html_template
+    return render_template('article_display.html', article_html=html_template)
 
+    #return html_template
 
-########
-#LOGIN#
-########
-# Decorators
+# @app.route('/getcategory/<category>', methods=['GET'])
+# def get_category_articles(category):
+
 
 
 # Authentication decorator to verify Firebase ID token
@@ -339,19 +356,29 @@ def loginpage():
 def registrationpage():
     return render_template('registration.html')
 
+# @app.route('/articles')
+# def articles():
+#     return render_template('articles.html')
+
+def login_required(f):
+    @wraps(f)
+    def decorated_function(*args, **kwargs):
+        if 'email' not in session:
+            return redirect(url_for('login', next=request.url))
+        return f(*args, **kwargs)
+    return decorated_function
+
+
 
 @app.route('/login', methods=['POST'])
 def login():
     email = request.form.get('email')
     password = request.form.get('password')
-
     user = db1.users.find_one({"email": email})
     if user and sha256_crypt.verify(password, user['password']):
-     
-        session['user'] = user['email']  
-        return redirect(url_for('dashboard'))  
+        session['user'] = user['email']  # Store user email in session
+        return redirect(url_for('articles'))
     else:
-        # Incorrect credentials
         flash('Invalid username/password combination')
         return redirect(url_for('loginpage'))
 
@@ -361,16 +388,44 @@ def signup():
   return User().signup()
   return jsonify({'redirect': url_for('registrationpage')})
 
+# @app.route('/registration', methods=['POST'])
+# def registration():
+#   return User().registration()
+#   return redirect(url_for('articles'))
+
 @app.route('/registration', methods=['POST'])
 def registration():
-  return User().registration()
+    # return User().registration()
+    # return redirect(url_for('articles'))
+    if 'user_id' not in session:
+        return jsonify({'error': 'Session not initialized correctly.'}), 400
+
+    user_id = session['user_id']
+    user_data = request.form.to_dict()
+    
+    # Example validation or preprocessing steps
+    if int(user_data.get('age', 0)) < 18:
+        return jsonify({'error': 'Age must be at least 18.'}), 400
+
+    # Update existing user data with form data
+    update_result = db1.users.update_one(
+        {"_id": ObjectId(user_id)},
+        {"$set": user_data},
+        upsert=False  # Ensure it does not create a new document
+    )
+
+    if update_result.modified_count > 0:
+        return redirect(url_for('dashboard'))
+    else:
+        return jsonify({'error': 'Failed to update user data.'}), 400
+
+
 
 
 @app.route('/logout')
 def logout():
-    session.clear()  # Clearing all session variables
+    session.pop('user', None)  # Remove 'user' from session
     return redirect(url_for('loginpage'))
-
 
 @app.route('/userprofile', methods=['GET'])
 def userprofile():
@@ -398,139 +453,188 @@ def forgot_password():
                 msg.body = f"Please click on the link to reset your password: {reset_url}"
                 mail.send(msg)
                 flash('Please check your email for a password reset link.', 'info')
+                app.logger.info(f"Password reset email sent successfully to {email}")
             except Exception as e:
-                flash(f'Failed to send the password reset email. Please try again later. Error: {str(e)}', 'error')
+                app.logger.error(f"Failed to send email: {e}")
+                flash('Failed to send the password reset email. Please try again later.', 'error')
+                return render_template('forgot_password.html')
+            return redirect(url_for('loginpage'))
         else:
             flash('No account found with that email address.', 'error')
-        return render_template('forgot_password.html')
     return render_template('forgot_password.html')
 
 
 @app.route('/reset-password/<token>', methods=['GET', 'POST'])
 def reset_password(token):
+    email = None
     try:
-        email = serializer.loads(token, salt='email-reset-salt', max_age=3600)  # Verifying the token
+        email = serializer.loads(token, salt='email-reset-salt', max_age=3600)
     except SignatureExpired:
-        flash('The password reset link has expired.', 'warning')  # Use 'warning' for expiration messages
+        flash('The password reset link has expired.', 'danger')
+        app.logger.warning("Expired token for password reset.")
         return redirect(url_for('forgot_password'))
     except BadSignature:
-        flash('Invalid password reset link.', 'danger')  # Use 'danger' for invalid link messages
+        flash('Invalid password reset link.', 'danger')
+        app.logger.error("Invalid token for password reset.")
         return redirect(url_for('forgot_password'))
 
     if request.method == 'POST':
         new_password = request.form.get('password')
-        if not new_password:
-            flash('Password cannot be empty.', 'danger')  # Ensuring password is not empty
-            return redirect(url_for('reset_password', token=token))
-        
-        # Here you might want to add additional checks for password strength if desired
-
         hashed_password = sha256_crypt.hash(new_password)
         db1.users.update_one({"email": email}, {"$set": {"password": hashed_password}})
-        flash('Your password has been successfully updated!', 'success')  # Confirming password reset success
+        flash('Your password has been updated!', 'success')
+        app.logger.info(f"Password updated for {email}")
         return redirect(url_for('loginpage'))
+    
     return render_template('reset_password.html', token=token)
 
 
 
-# image_download_path = '/Users/riyapalkhiwala/Desktop/Spring2024/CS682/new/diabetes_umass_nursing/link_images'
-# total_images_downloaded = 0
-
-# def get_extension_from_url(image_url):
-#     if '?' in image_url:
-#         image_url = image_url.split('?')[0]  # Remove query parameters
-#     extension = image_url.split('/')[-1].split('.')[-1]
-#     return extension
-
-# def clean_filename(image_url):
-#         # Split the filename and keep only the part before the '?'
-#         filename = image_url.split('/')[-1].split('?')[0]
-#         # Remove any additional extensions if present
-#         parts = filename.split('.')
-#         cleaned_filename = parts[0] + '.' + parts[-1]
-#         return cleaned_filename
 
 
-# def download_image(image_url, article_id, image_download_path):
-#     # Initialize filename to None
-#     filename = None
+@app.route('/signup/facebook', methods=['POST'])
+def facebook_signup():
+    data = request.get_json()
+    if not data or 'firebase_token' not in data:
+        return jsonify({'error': 'No data provided'}), 400
 
-#     if image_url.startswith('data:image'):
-#         match = re.search(r'base64,(.*)', image_url)
-#         if match:
-#             base64_data = match.group(1)
-#             image_data = base64.b64decode(base64_data)
-#             # Infer the extension from the MIME type in the data URL
-#             extension = image_url.split(';')[0].split('/')[1]
-#             filename = f"{article_id}.{extension}"
-#         else:
-#             print("No base64 content found in data URL.")
-#             return None
-#     else:
-#         response = requests.get(image_url, stream=True)
-#         if response.status_code == 200:
-#             image_url=clean_filename(image_url)
-#             extension = get_extension_from_url(image_url)
-#             image_data = response.content
-#             filename = f"{article_id}.{extension}"
-#         else:
-#             print(f"Failed to download image from {image_url}")
-#             return None
+    firebase_token = data['firebase_token']
+    try:
+        decoded_token = auth.verify_id_token(firebase_token)
+        user_info = auth.get_user(decoded_token['uid'])
 
-#     # If a filename was set, save the image data to a file
-#     if filename:
-#         save_path = os.path.join(image_download_path, filename)
-#         with open(save_path, 'wb') as f:
-#             f.write(image_data)
-#         print(f"Image saved as {filename}")
-#         return filename
-
-#     return filename
+        # Check if the user already exists
+        existing_user = db1.users.find_one({"firebase_uid": user_info.uid})
+        if existing_user:
+            # If user exists, update session and redirect
+            session['user_id'] = str(existing_user['_id'])
+            return jsonify({'redirect': url_for('dashboard')})
+        else:
+            # Create new user if not exists
+            new_user_data = {
+                "email": user_info.email,
+                "displayName": user_info.display_name,
+                "firebase_uid": user_info.uid,
+                "photoUrl": user_info.photo_url
+            }
+            result = db1.users.insert_one(new_user_data)
+            session['user_id'] = str(result.inserted_id)
+            return jsonify({'redirect': url_for('registrationpage')})
+    except Exception as e:
+        return jsonify({'error': str(e)}), 400
 
 
-# def get_first_image_url(page_url):
-#     response = requests.get(page_url)
-#     if response.status_code == 200:
-#         soup = BeautifulSoup(response.text, 'html.parser')
-#         image = soup.find('img')
-#         if image and 'src' in image.attrs:
-#             return image['src']
-#     return None
-
-# def update_article_image(article_id, image_filename):
-#     # Update the article document in MongoDB to include the image filename
-#     # result = collection.update_one({'_id': article_id}, {'$set': {'image_filename': image_filename}})
-#     collection.find_one({'_id': article_id})
-#     result = collection.update_one({'_id': article_id}, {'$set': {'image_filename': image_filename}})
-#     if result:
-#         print(f"Found  documents.")
 
 
-# def download_images():
-#     total_images_downloaded = 0
-#     for article in collection.find():
-#         link = article.get('link')
-#         article_id = article.get('_id')
-#         if link:
-#             first_image_url = get_first_image_url(link)
-#             if first_image_url:
-#                 if not first_image_url.startswith(('http:', 'https:')):
-#                     first_image_url = requests.compat.urljoin(link, first_image_url)
-#                 image_filename = download_image(first_image_url, article_id, image_download_path)
-#                 if image_filename:
-#                     update_article_image(article_id, image_filename)
-#                     total_images_downloaded += 1
-#                     print(f"Downloaded and updated {article_id} with image {image_filename}")
-#     print(f"Total images downloaded and updated in MongoDB: {total_images_downloaded}")
+@app.route('/login/facebook', methods=['POST'])
+def facebook_login():
+    data = request.get_json()
+    if not data:
+        return jsonify({'error': 'No data provided'}), 400
+    firebase_token = data.get('firebase_token')
+    if not firebase_token:
+        return jsonify({'error': 'Firebase token is missing'}), 400
+
+    try:
+        decoded_token = auth.verify_id_token(firebase_token)
+        uid = decoded_token['uid']
+        existing_user = db1.users.find_one({"firebase_uid": uid})
+        if existing_user:
+            session['user'] = str(existing_user['_id'])
+            return jsonify({'redirect_url': url_for('dashboard'), 'message': 'Login successful'}), 200
+        else:
+            return jsonify({'error': 'User does not exist, please sign up.'}), 404
+    except Exception as e:
+        return jsonify({'error': str(e)}), 400
+
+@app.route('/signup/google', methods=['POST'])
+def google_signup():
+    data = request.get_json()
+    if not data or 'firebase_token' not in data:
+        return jsonify({'error': 'Firebase token not provided'}), 400
+
+    firebase_token = data['firebase_token']
+    try:
+        # Verify the ID token while checking if the token is revoked by passing check_revoked=True.
+        decoded_token = auth.verify_id_token(firebase_token, check_revoked=True)
+        uid = decoded_token['uid']
+
+        # Check if user exists in your DB or create a new one
+        existing_user = db1.users.find_one({"firebase_uid": uid})
+        if not existing_user:
+            user_data = {
+                "email": decoded_token['email'],
+                "displayName": decoded_token.get('name', ''),
+                "firebase_uid": uid,
+                "photoUrl": decoded_token.get('picture', '')
+            }
+            db1.users.insert_one(user_data)
+            session['user_id'] = str(user_data['_id'])
+            # Redirect to registration page to complete the profile
+            return jsonify({'redirect_url': url_for('registrationpage')})
+        else:
+            session['user_id'] = str(existing_user['_id'])
+            # Redirect to dashboard if user already exists
+            return jsonify({'redirect_url': url_for('dashboard')})
+    except Exception as e:
+        return jsonify({'error': str(e)}), 500
+
+    
+@app.route('/login/google', methods=['POST'])
+def google_login():
+    data = request.get_json()
+    if not data or 'firebase_token' not in data:
+        return jsonify({'error': 'Firebase token not provided'}), 400
+
+    firebase_token = data['firebase_token']
+    try:
+        # Verify the ID token while checking if the token is revoked by passing check_revoked=True.
+        decoded_token = auth.verify_id_token(firebase_token, check_revoked=True)
+        uid = decoded_token['uid']
+
+        # Check if user exists in your DB or create a new one
+        existing_user = db1.users.find_one({"firebase_uid": uid})
+        if existing_user:
+            session['user_id'] = str(existing_user['_id'])
+            # Redirect to dashboard if user already exists
+            return jsonify({'redirect_url': url_for('dashboard')})
+        else:
+            return jsonify({'error': 'User does not exist, please sign up.'}), 404
+    except Exception as e:
+        return jsonify({'error': str(e)}), 500
+    
+
+@app.route('/categorizedarticle',methods=['GET'])
+def categorizedarticle():
+    return render_template('categorizedarticle.html')
 
 
-# def download_images_in_thread():
-#     thread = threading.Thread(target=download_images)
-#     thread.start()
+@app.route('/getarticles/<category>', methods=['GET'])
+def get_category_articles(category):
+    try:
+        # Using $in to check if the category list includes the given category
+        articles = collection.find({"category": {"$in": [category]}})
+        articles_list = [json.loads(json.dumps(article, default=str)) for article in articles]
+        return jsonify(articles_list), 200
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
 
+
+# function to start chatbotdef start_chainlit():
+def start_chainlit():
+    # Assuming 'Llama2_chatbot' is in the current directory or adjust the path as necessary
+    # chatbot_dir = os.path.join(os.path.dirname(__file__), 'Llama2_chatbot')
+    command = ["chainlit", "run", "model.py"]
+    subprocess.Popen(command)
+
+def run_chainlit_in_thread():
+    thread = threading.Thread(target=start_chainlit)
+    thread.start()
+
+# if __name__ == '__main__':
+# #     # download_images_in_thread() 
+#     run_chainlit_in_thread()
+#     app.run(debug=True, use_reloader=False)
 
 if __name__ == '__main__':
-#     # download_images_in_thread() 
-     app.run(debug=True)
-
-
+    app.run(debug=True) 

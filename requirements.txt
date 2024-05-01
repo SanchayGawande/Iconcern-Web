@@ -6,3 +6,16 @@ flask-login
 beautifulsoup4==4.12.2
 pandas
 bs4==0.0.1
+chainlit
+langchain
+langchain_community
+PyPDF2
+chromadb
+groq
+langchain-groq
+ollama
+redis
+
+firebase_admin
+Pillow
+Flask-Mail
