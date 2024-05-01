@@ -25,57 +25,15 @@ import requests
 import re
 import base64
 from bson import SON
-from flask import Flask, render_template, request,json,jsonify,send_file,session,send_from_directory,redirect, redirect, url_for, flash
-from flask_mail import Mail, Message
-from itsdangerous import URLSafeTimedSerializer, SignatureExpired, BadSignature
-from article_to_html import json_to_html
-from pymongo import MongoClient
-from bson import ObjectId
-import urllib
-import pymongo
-from datetime import datetime
-from flask_cors import CORS
-from passlib.hash import sha256_crypt
-from flask_login import LoginManager,login_user,login_required,logout_user
-from bs4 import BeautifulSoup
-from models import User
-from functools import wraps
-import pandas as pd
-import firebase_admin
-from firebase_admin import credentials, auth
-from flask import Flask
-from flask_cors import CORS
 
 if not firebase_admin._apps:
 
     cred = credentials.Certificate('/Users/sanchay/Downloads/CromeDownloads/diabetes_umass_nursing_integrated/dia-user-login-firebase-adminsdk-1o8dc-00dad728ce.json')
     firebase_admin.initialize_app(cred)
 
-from flask_cors import CORS
-
-app = Flask(__name__)
-CORS(app)
 
 app = Flask(__name__,static_folder='static')
-def get_host_url():
-
-    local_host_url = request.host_url
-    return local_host_url 
-
-# Configure your Flask-Mail settings
-app.config['MAIL_SERVER'] = 'smtp.gmail.com'
-app.config['MAIL_PORT'] = 465  # Correct port for SSL
-app.config['MAIL_USE_TLS'] = False  # TLS should be False when using SSL
-app.config['MAIL_USE_SSL'] = True  # SSL is enabled
-app.config['MAIL_USERNAME'] = 'iconcern01@gmail.com'
-app.config['MAIL_PASSWORD'] = 'qiklxtldyqqepbax'  # Use an app password if 2FA is enabled
-app.config['MAIL_DEFAULT_SENDER'] = 'iconcern01@gmail.com'
-
-
-mail = Mail(app)
-
 app.secret_key = 'd21ef8b23ef23e1d5df1d7d2d037b735b0c3096fb14bcf20da5eec7e06160c33'
-serializer = URLSafeTimedSerializer(app.config['SECRET_KEY'])
 app.config["SESSION_TYPE"] = "filesystem"
 
 # Set session expiration
@@ -111,10 +69,7 @@ users = db1.userdata
 
 @login_manager.user_loader
 def load_user(user_id):
-
     return User.get(user_id)  
-
-
 
 @app.route('/check')
 def check_mongodb_connection():
@@ -126,6 +81,7 @@ def check_mongodb_connection():
         return jsonify({"message": "MongoDB Connection is successful!", "status": db_stats})
     except Exception as e:
         return jsonify({"message": "MongoDB Connection Failed", "error": str(e)}), 500
+    
     
 @app.route('/dashboard/allvalues')
 def articledetails():
@@ -192,7 +148,7 @@ def serve_static(filename):
 
 @app.route('/')
 def index():
-    return render_template('index.html') 
+    return render_template('home.html') 
 
 @app.route('/home')
 def dashboard():
@@ -331,6 +287,12 @@ def view_user_article(article_id):
 # @app.route('/getcategory/<category>', methods=['GET'])
 # def get_category_articles(category):
 
+
+
+########
+#LOGIN#
+########
+# Decorators
 
 
 # Authentication decorator to verify Firebase ID token
@@ -602,7 +564,6 @@ def google_login():
             return jsonify({'error': 'User does not exist, please sign up.'}), 404
     except Exception as e:
         return jsonify({'error': str(e)}), 500
-    
 
 @app.route('/categorizedarticle',methods=['GET'])
 def categorizedarticle():
@@ -631,10 +592,9 @@ def run_chainlit_in_thread():
     thread = threading.Thread(target=start_chainlit)
     thread.start()
 
-# if __name__ == '__main__':
-# #     # download_images_in_thread() 
-#     run_chainlit_in_thread()
-#     app.run(debug=True, use_reloader=False)
+
 
 if __name__ == '__main__':
-    app.run(debug=True) 
+#     # download_images_in_thread() 
+    run_chainlit_in_thread()
+    app.run(debug=True, use_reloader=False)
