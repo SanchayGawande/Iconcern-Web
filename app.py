@@ -25,15 +25,57 @@ import requests
 import re
 import base64
 from bson import SON
+from flask import Flask, render_template, request,json,jsonify,send_file,session,send_from_directory,redirect, redirect, url_for, flash
+from flask_mail import Mail, Message
+from itsdangerous import URLSafeTimedSerializer, SignatureExpired, BadSignature
+from article_to_html import json_to_html
+from pymongo import MongoClient
+from bson import ObjectId
+import urllib
+import pymongo
+from datetime import datetime
+from flask_cors import CORS
+from passlib.hash import sha256_crypt
+from flask_login import LoginManager,login_user,login_required,logout_user
+from bs4 import BeautifulSoup
+from models import User
+from functools import wraps
+import pandas as pd
+import firebase_admin
+from firebase_admin import credentials, auth
+from flask import Flask
+from flask_cors import CORS
 
 if not firebase_admin._apps:
 
     cred = credentials.Certificate('/Users/sanchay/Downloads/CromeDownloads/diabetes_umass_nursing_integrated/dia-user-login-firebase-adminsdk-1o8dc-00dad728ce.json')
     firebase_admin.initialize_app(cred)
 
+from flask_cors import CORS
+
+app = Flask(__name__)
+CORS(app)
 
 app = Flask(__name__,static_folder='static')
+def get_host_url():
+
+    local_host_url = request.host_url
+    return local_host_url 
+
+# Configure your Flask-Mail settings
+app.config['MAIL_SERVER'] = 'smtp.gmail.com'
+app.config['MAIL_PORT'] = 465  # Correct port for SSL
+app.config['MAIL_USE_TLS'] = False  # TLS should be False when using SSL
+app.config['MAIL_USE_SSL'] = True  # SSL is enabled
+app.config['MAIL_USERNAME'] = 'iconcern01@gmail.com'
+app.config['MAIL_PASSWORD'] = 'qiklxtldyqqepbax'  # Use an app password if 2FA is enabled
+app.config['MAIL_DEFAULT_SENDER'] = 'iconcern01@gmail.com'
+
+
+mail = Mail(app)
+
 app.secret_key = 'd21ef8b23ef23e1d5df1d7d2d037b735b0c3096fb14bcf20da5eec7e06160c33'
+serializer = URLSafeTimedSerializer(app.config['SECRET_KEY'])
 app.config["SESSION_TYPE"] = "filesystem"
 
 # Set session expiration
@@ -69,7 +111,10 @@ users = db1.userdata
 
 @login_manager.user_loader
 def load_user(user_id):
+
     return User.get(user_id)  
+
+
 
 @app.route('/check')
 def check_mongodb_connection():
@@ -81,7 +126,6 @@ def check_mongodb_connection():
         return jsonify({"message": "MongoDB Connection is successful!", "status": db_stats})
     except Exception as e:
         return jsonify({"message": "MongoDB Connection Failed", "error": str(e)}), 500
-    
     
 @app.route('/dashboard/allvalues')
 def articledetails():
@@ -148,7 +192,7 @@ def serve_static(filename):
 
 @app.route('/')
 def index():
-    return render_template('home.html') 
+    return render_template('index.html') 
 
 @app.route('/home')
 def dashboard():
@@ -344,45 +388,83 @@ def login():
         flash('Invalid username/password combination')
         return redirect(url_for('loginpage'))
 
+import logging
+logging.basicConfig(level=logging.DEBUG)
 
 @app.route('/signup', methods=['POST'])
 def signup():
-  return User().signup()
-  return jsonify({'redirect': url_for('registrationpage')})
+    user_data = request.get_json()
+    user_data['password'] = sha256_crypt.hash(user_data['password'])
+    if db1.users.find_one({"email": user_data['email']}):
+        return jsonify({"error": "Email address already in use"}), 400
 
-# @app.route('/registration', methods=['POST'])
-# def registration():
-#   return User().registration()
-#   return redirect(url_for('articles'))
+    if db1.users.insert_one(user_data).inserted_id:
+        session['email'] = user_data['email']
+        print("Session set:", session)  # Debug: Check what's in the session
+        return redirect(url_for('registrationpage'))
+    else:
+        return jsonify({"error": "Signup failed"}), 400
+
+
+
 
 @app.route('/registration', methods=['POST'])
 def registration():
-    # return User().registration()
-    # return redirect(url_for('articles'))
-    if 'user_id' not in session:
+    if 'email' not in session:
+        return jsonify({'error': 'Session not found. Please log in.'}), 400
+
+    email = session['email']
+    user_data = request.form.to_dict()  # Assuming data is sent as form data
+
+    # Debugging: Print or log the data received to ensure it's correct
+    app.logger.debug("Registration data received: %s", user_data)
+
+    # Ensure all fields are present
+    required_fields = ['fullName', 'age', 'gender', 'streetAddress', 'city', 'state', 'zipCode', 'country', 'diagnosisDate', 'fastingGlucose', 'hba1c', 'medications', 'otherConditions', 'diet', 'physicalactivitylevel', 'weight', 'height', 'managementgoals', 'learningpreferences']
+    if not all(field in user_data for field in required_fields):
+        return jsonify({'error': 'Missing one or more required fields.'}), 400
+
+    # Update the user profile in MongoDB
+    try:
+        result = db1.users.update_one(
+            {'email': email},
+            {'$set': user_data}
+        )
+        if result.modified_count == 1:
+            return redirect(url_for('articles'))
+        else:
+            return jsonify({'error': 'No updates made to the profile.'}), 404
+    except Exception as e:
+        app.logger.error("Failed to update user profile: %s", str(e))
+        return jsonify({'error': 'Failed to update due to an error.'}), 500
+    
+    
+@app.route('/social_registration', methods=['POST'])
+def social_registration():
+    user_id = session.get('user_id')
+    if not user_id:
         return jsonify({'error': 'Session not initialized correctly.'}), 400
 
-    user_id = session['user_id']
     user_data = request.form.to_dict()
-    
-    # Example validation or preprocessing steps
+
+    # Validation of user data, example: checking age
     if int(user_data.get('age', 0)) < 18:
         return jsonify({'error': 'Age must be at least 18.'}), 400
 
-    # Update existing user data with form data
+    # Update user data in MongoDB
     update_result = db1.users.update_one(
         {"_id": ObjectId(user_id)},
         {"$set": user_data},
-        upsert=False  # Ensure it does not create a new document
+        upsert=False  # Ensure no new documents are created
     )
 
     if update_result.modified_count > 0:
-        return redirect(url_for('dashboard'))
+        return redirect(url_for('articles'))
     else:
         return jsonify({'error': 'Failed to update user data.'}), 400
 
 
-
+    
 
 @app.route('/logout')
 def logout():
@@ -451,9 +533,6 @@ def reset_password(token):
     return render_template('reset_password.html', token=token)
 
 
-
-
-
 @app.route('/signup/facebook', methods=['POST'])
 def facebook_signup():
     data = request.get_json()
@@ -484,8 +563,6 @@ def facebook_signup():
             return jsonify({'redirect': url_for('registrationpage')})
     except Exception as e:
         return jsonify({'error': str(e)}), 400
-
-
 
 
 @app.route('/login/facebook', methods=['POST'])
@@ -593,8 +670,10 @@ def run_chainlit_in_thread():
     thread.start()
 
 
+# if __name__ == '__main__':
+# #     # download_images_in_thread() 
+#     run_chainlit_in_thread()
+#     app.run(debug=True, use_reloader=False)
 
 if __name__ == '__main__':
-#     # download_images_in_thread() 
-    run_chainlit_in_thread()
-    app.run(debug=True, use_reloader=False)
+    app.run(debug=True) 

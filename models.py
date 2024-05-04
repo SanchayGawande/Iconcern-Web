@@ -53,75 +53,73 @@ class User:
     #         'password': self.password
     #     })
 
-    def start_session(self, user):
-            if 'password' in user:
-                del user['password']
+ def start_session(self, user):
+    if 'password' in user:
+        del user['password']
 
-            session['logged_in'] = True
-            session['user'] = {
-                'email': user['email']  
-            }
-            response_data = {
-                'email': user['email']
-            }
+    session['logged_in'] = True
+    session['user'] = {
+        'email': user['email']  # Ensure this matches what your other signup methods set
+    }
+    return jsonify({"success": "Session started", "email": user['email']}), 200
 
-            return jsonify(response_data), 200
 
-    def signup(self):
-                from app import db1
-                user= request.json
-                print(user)
+ def signup(self):
+    print("Received signup request with data:", request.json)
+    from app import db1
+    user = request.json
 
-                # Encrypt the password using hashlib
-                user['password'] = sha256_crypt.encrypt(user['password'])
+    user_data['password'] = sha256_crypt.hash(user_data['password'])
 
-                # Check for existing email address
-                if db1.users.find_one({"email": user['email']}):
-                    return jsonify({"error": "Email address already in use"}), 400
 
-                if db1.users.insert_one(user): 
-                    self.start_session(user)
-                    return redirect('/registrationpage')
-                else:      
+    if db1.users.find_one({"email": user['email']}):
+        return jsonify({"error": "Email address already in use"}), 400
 
-                    return jsonify({"error": "Signup failed"}), 400
+    if db1.users.insert_one(user).inserted_id:
+        self.start_session(user)
+        return redirect('/registrationpage')
+    else:
+        return jsonify({"error": "Signup failed"}), 400
+
         
-    def registration(self):
-                from app import db1
-                user = session.get('user', {})
-                email = user.get('email')
-                if not email:
-                    return jsonify({"error": "Email not found in session"}), 401
+ def registration(self):
+    print("Attempting registration with session data:", session.get('user', {}))  # Debug statement
+    from app import db1
+    user = session.get('user', {})
+    email = user.get('email')
+
+    if not email:
+        return jsonify({"error": "Email not found in session"}), 401
                 
-                fullName = request.form['fullName']
-                age = int(request.form.get('age', 0))  # Convert age to integer
-                diagnosisDate = request.form['diagnosisDate']
-                bloodglucoselevels = int(request.form.get('bloodglucoselevels', 0))  # Correct variable name
-                height = int(request.form.get('height', 0))
-                weight = int(request.form.get('weight', 0))
-                physical_activity_level = int(request.form.get('physicalactivitylevel', 0))
+        fullName = request.form['fullName']
+        age = int(request.form.get('age', 0))  # Convert age to integer
+        diagnosisDate = request.form['diagnosisDate']
+        bloodglucoselevels = int(request.form.get('bloodglucoselevels', 0))  # Correct variable name
+        height = int(request.form.get('height', 0))
+        weight = int(request.form.get('weight', 0))
+        physical_activity_level = int(request.form.get('physicalactivitylevel', 0))
 
                 # Validate age
-                if age < 14 or age > 100:
-                 return jsonify({"error": "Invalid age. Must be between 18 and 100."}), 400
+        if age < 14 or age > 100:
+             return jsonify({"error": "Invalid age. Must be between 18 and 100."}), 400
              
                 # Validate blood glucose levels
-                if bloodglucoselevels < 40 or bloodglucoselevels > 600:
+        if bloodglucoselevels < 40 or bloodglucoselevels > 600:
                  return jsonify({"error": "Blood glucose levels must be between 40 and 600."}), 400
     
                  # Validate height and weight
-                if not 50 <= height <= 250 or not 20 <= weight <= 300:
+        if not 50 <= height <= 250 or not 20 <= weight <= 300:
                  return jsonify({"error": "Invalid height or weight."}), 400
     
                   # Validate physical activity level
-                if not 1 <= physical_activity_level <= 5:
+        if not 1 <= physical_activity_level <= 5:
                  return jsonify({"error": "Physical activity level must be between 1 and 5."}), 400
 
                 # Validate diagnosis date
-                if datetime.strptime(diagnosisDate, '%Y-%m-%d') > datetime.now():
+        if datetime.strptime(diagnosisDate, '%Y-%m-%d') > datetime.now():
                  return jsonify({"error": "Diagnosis date cannot be in the future."}), 
                
-                db1.users.update_one(
+        db1.users.update_one(
                     {"email": email}, 
                     {"$set": {
                         "fullName": request.form['fullName'],
@@ -140,8 +138,8 @@ class User:
                     }}
                 )
                 
-                session.clear()
-                return redirect('/articles')
+        session.clear()
+        return redirect('/articles')
                 
 
     def getuserprofile(self):

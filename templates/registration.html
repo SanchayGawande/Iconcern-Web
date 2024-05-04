@@ -130,20 +130,34 @@
                                 </div>
                             </div>
                             <div class="form-group">
-                                <label for="location">Location:</label>
-                                <select class="form-control" id="location" name="location" required>
-                                    <option value="">Please select your city</option>
-                                    <option value="new_york">New York</option>
-                                    <option value="boston">Boston</option>
-                                    <option value="san_francisco">San Francisco</option>
-                                    <option value="chicago">Chicago</option>
-                                    <option value="seattle">Seattle</option>
-                                    <option value="los_angeles">Los Angeles</option> <!-- Example new city -->
-                                    <option value="miami">Miami</option> <!-- Example new city -->
-                                    <option value="las_vegas">Las Vegas</option> <!-- Example new city -->
-                                </select>
-                                
+                                <label for="streetAddress">Street Address:</label>
+                                <input type="text" class="form-control" id="streetAddress" name="streetAddress" required placeholder="123 Main St">
                             </div>
+                            <div class="form-group">
+                                <label for="city">City:</label>
+                                <input type="text" class="form-control" id="city" name="city" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="state">State/Province:</label>
+                                <input type="text" class="form-control" id="state" name="state" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="zipCode">Zip/Postal Code:</label>
+                                <input type="text" class="form-control" id="zipCode" name="zipCode" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="country">Country:</label>
+                                <select class="form-control" id="country" name="country" required>
+                                    <option value="">Please select your country</option>
+                                    <option value="usa">United States</option>
+                                    <option value="canada">Canada</option>
+                                    <option value="uk">United Kingdom</option>
+                                    <option value="australia">Australia</option>
+                                    <option value="india">India</option>
+                                    <!-- Add more countries as needed -->
+                                </select>
+                            </div>
+                            
                         </div>
                     </div>
                     <div class="tab-pane fade" id="medical" role="tabpanel" aria-labelledby="medical-tab">
@@ -154,8 +168,25 @@
                         </div>
                         <div class="form-group">
                             <label for="bgl">Blood Glucose Levels:</label>
-                            <input type="number" class="form-control" id="bgl" name="bloodglucoselevels" required min="40" max="600" placeholder="Between 40 to 600">
+                            <div class="input-group">
+                                <input type="number" class="form-control" id="fastingGlucose" name="fastingGlucose" placeholder="Fasting Glucose (mg/dL)" min="40" max="600" required>
+                                <div class="input-group-append">
+                                    <span class="input-group-text">mg/dL</span>
+                                </div>
+                            </div>                           
+                            <div class="input-group mt-2">
+                                <input type="number" class="form-control" id="hba1c" name="hba1c" placeholder="HbA1c" min="4" max="15" step="0.1" required>
+                                <div class="input-group-append">
+                                    <span class="input-group-text">%</span>
+                                </div>
+                            </div>
+                            <small id="bgHelp" class="form-text text-muted">Enter your last known fasting glucose and HbA1c levels.</small>
                         </div>
+                        <div class="form-group">
+                            <label for="medications">Medications:</label>
+                            <small id="medsHelp" class="form-text text-muted">List any diabetes medications you are taking, including dosage and timing.</small>
+                            <textarea class="form-control" id="medications" name="medications" rows="3" placeholder="e.g., Metformin 500 mg, twice a day"></textarea>
+                        </div>                         
                         <div class="form-group">
                             <label for="omc">Other Medical Conditions:</label>
                             <textarea class="form-control" id="omc" name="otherConditions" rows="4" placeholder="Enter any other health conditions here..."></textarea>
@@ -183,6 +214,8 @@
                             <label for="pal">Physical Activity Level:</label>
                             <input type="number" class="form-control" id="pal" name="physicalactivitylevel" required min="1" max="5" placeholder="5 - most active to 1 - not active">
                         </div>
+                        <small id="PAL" class="form-text text-muted">To offer personalized exercise recommendations</small>
+                      
                         <div class="form-group">
                             <label for="weight">Weight:</label>
                             <input type="number" class="form-control" id="weight" name="weight" required min="20" max="300" placeholder="kgs">
@@ -195,7 +228,7 @@
                     <div class="tab-pane fade" id="goals" role="tabpanel" aria-labelledby="goals-tab">
                         <div class="form-group">
                             <label for="mg">Management Goals:</label>
-                            <textarea class="form-control" id="mg" name="managementgoals" rows="4" placeholder="Enter your management goals..."></textarea>
+                            <textarea class="form-control" id="mg" name="managementgoals" rows="4" placeholder="Enter your management goals Such as lowering blood sugar, losing weight, increasing physical activity, or improving diet. (Other)"></textarea>
                         </div>
                         <div class="form-group" id="Learningpreferences">
                             <fieldset>
@@ -229,6 +262,7 @@
             $('[data-toggle="tooltip"]').tooltip()
         });
 
+        
         document.addEventListener('DOMContentLoaded', function() {
             const navLinks = document.querySelectorAll('.slider-nav .nav-link');
         
@@ -261,4 +295,3 @@
     </script>
 </body>
 </html>
-
