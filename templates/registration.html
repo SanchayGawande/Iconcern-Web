@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Registration</title>
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    
+    <style>
+        body {
+            background: linear-gradient(135deg, #1E88E5 0%, #1565C0 100%);
+            font-family: 'Arial', sans-serif;
+            display: flex;
+            min-height: 100vh;
+            margin: 0;
+            align-items: center;
+            justify-content: center;
+        }
+        .form-container {
+            background-color: #ffffff;
+            padding: 50px;
+            border-radius: 8px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+            width: 90%;
+            max-width: 1000px;
+            margin: auto;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-around;
+            transition: transform 0.3s ease-out;
+        }
+        .nav-tabs {
+            border-bottom: 2px solid #007bff;
+        }
+        .nav-tabs .nav-link {
+            padding: 12px 20px;
+            margin-right: 2px;
+            border-radius: 0.25rem 0.25rem 0 0;
+            color: #007bff;
+            background-color: #e7f0fb;
+            transition: background-color 0.3s ease-in-out;
+        }
+        .nav-tabs .nav-item.show .nav-link, .nav-tabs .nav-link.active {
+            font-weight: bold;
+            color: #007bff;
+            background-color: #fff;
+            border-color: #007bff #007bff #fff;
+            border-bottom: 3px solid #007bff;
+        }
+        .btn-custom {
+            background-color: #007bff;
+            color: #ffffff;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+            transition: background-color 0.3s ease-in-out, transform 0.2s ease;
+        }
+        .btn-custom:hover {
+            background-color: #0056b3;
+            transform: translateY(-2px);
+        }
+        input[type="text"], input[type="number"], select, textarea {
+            transition: border-color 0.2s ease-in-out;
+            outline: none;
+        }
+        input[type="text"]:focus, input[type="number"]:focus, select:focus, textarea:focus {
+            border-color: #007bff;
+            box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
+        }
+        .tab-content .tab-pane {
+            padding: 20px;
+            background-color: #f8f9fa;
+            border: 1px solid #dee2e6;
+            border-top: none;
+            border-radius: 0 0 0.25rem 0.25rem;
+        }
+        @media (max-width: 768px) {
+            .nav-tabs .nav-link {
+                padding: 8px 10px;
+            }
+            .form-container {
+                padding: 20px;
+                width: 100%;
+                max-width: none;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container mt-5">
+        <div class="form-container">
+            <ul class="nav nav-tabs" id="registrationTab" role="tablist">
+                <li class="nav-item">
+                    <a class="nav-link active" id="personal-tab" data-toggle="tab" href="#personal" role="tab" aria-controls="personal" aria-selected="true">Personal Details</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" id="medical-tab" data-toggle="tab" href="#medical" role="tab" aria-controls="medical" aria-selected="false">Medical</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" id="lifestyle-tab" data-toggle="tab" href="#lifestyle" role="tab" aria-controls="lifestyle" aria-selected="false">Lifestyle</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" id="goals-tab" data-toggle="tab" href="#goals" role="tab" aria-controls="goals" aria-selected="false">Goals & Preferences</a>
+                </li>
+            </ul>
+
+            <form id="registrationForm" action="/registration" method="post">
+                <div class="tab-content" id="registrationTabContent">
+                    <div class="tab-pane fade show active" id="personal" role="tabpanel" aria-labelledby="personal-tab">
+                        <div class="form-group">
+                            <label for="fullName">Full Name or Study ID:</label>
+                            <input type="text" class="form-control" id="fullName" name="fullName" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="age">Age:</label>
+                            <input type="number" class="form-control" id="age" name="age" required min="14" max="120" placeholder="Above 14">
+                        </div>
+                        <div class="form-group">
+                            <label>Gender:</label>
+                            <div class="radio-group">
+                                <div class="form-check form-check-inline">
+                                    <input class="form-check-input" type="radio" name="gender" id="male" value="male">
+                                    <label class="form-check-label" for="male">Male</label>
+                                </div>
+                                <div class="form-check form-check-inline">
+                                    <input class="form-check-input" type="radio" name="gender" id="female" value="female">
+                                    <label class="form-check-label" for="female">Female</label>
+                                </div>
+                                <div class="form-check form-check-inline">
+                                    <input class="form-check-input" type="radio" name="gender" id="other" value="other">
+                                    <label class="form-check-label" for="other">Other</label>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="location">Location:</label>
+                                <select class="form-control" id="location" name="location" required>
+                                    <option value="">Please select your city</option>
+                                    <option value="new_york">New York</option>
+                                    <option value="boston">Boston</option>
+                                    <option value="san_francisco">San Francisco</option>
+                                    <option value="chicago">Chicago</option>
+                                    <option value="seattle">Seattle</option>
+                                    <option value="los_angeles">Los Angeles</option> <!-- Example new city -->
+                                    <option value="miami">Miami</option> <!-- Example new city -->
+                                    <option value="las_vegas">Las Vegas</option> <!-- Example new city -->
+                                </select>
+                                
+                            </div>
+                        </div>
+                    </div>
+                    <div class="tab-pane fade" id="medical" role="tabpanel" aria-labelledby="medical-tab">
+                        <div class="form-group">
+                            <label for="diagnosisDate">Diagnosis Date:</label>
+                            <input type="date" class="form-control" id="diagnosisDate" name="diagnosisDate" required>
+                            <span class="tooltip-icon" data-toggle="tooltip" data-placement="top" title="When were you diagnosed with diabetes?">?</span>
+                        </div>
+                        <div class="form-group">
+                            <label for="bgl">Blood Glucose Levels:</label>
+                            <input type="number" class="form-control" id="bgl" name="bloodglucoselevels" required min="40" max="600" placeholder="Between 40 to 600">
+                        </div>
+                        <div class="form-group">
+                            <label for="omc">Other Medical Conditions:</label>
+                            <textarea class="form-control" id="omc" name="otherConditions" rows="4" placeholder="Enter any other health conditions here..."></textarea>
+                        </div>
+                    </div>
+                    <div class="tab-pane fade" id="lifestyle" role="tabpanel" aria-labelledby="lifestyle-tab">
+                        <div class="form-group">
+                            <label>Dietary Preferences:</label>
+                            <div class="form-group">
+                                <div class="radio-group" id="dietradio" style="display: inline-flex;">
+                                    <input type="radio" id="vegetarian" name="diet" value="vegetarian">
+                                    <label for="vegetarian">Vegetarian</label>
+                                    <input type="radio" id="vegan" name="diet" value="vegan">
+                                    <label for="vegan">Vegan</label>
+                                    <input type="radio" id="glutenFree" name="diet" value="glutenFree">
+                                    <label for="glutenFree">Gluten-Free</label>
+                                    <input type="radio" id="kosher" name="diet" value="kosher">
+                                    <label for="kosher">Kosher</label>
+                                    <input type="radio" id="halal" name="diet" value="halal">
+                                    <label for="halal">Halal</label>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="pal">Physical Activity Level:</label>
+                            <input type="number" class="form-control" id="pal" name="physicalactivitylevel" required min="1" max="5" placeholder="5 - most active to 1 - not active">
+                        </div>
+                        <div class="form-group">
+                            <label for="weight">Weight:</label>
+                            <input type="number" class="form-control" id="weight" name="weight" required min="20" max="300" placeholder="kgs">
+                        </div>
+                        <div class="form-group">
+                            <label for="height">Height:</label>
+                            <input type="number" class="form-control" id="height" name="height" required min="50" max="250" placeholder="in cm">
+                        </div>
+                    </div>
+                    <div class="tab-pane fade" id="goals" role="tabpanel" aria-labelledby="goals-tab">
+                        <div class="form-group">
+                            <label for="mg">Management Goals:</label>
+                            <textarea class="form-control" id="mg" name="managementgoals" rows="4" placeholder="Enter your management goals..."></textarea>
+                        </div>
+                        <div class="form-group" id="Learningpreferences">
+                            <fieldset>
+                                <legend>Learning Preferences:</legend>
+                                <label for="videos">
+                                <input type="checkbox" id="videos" name="learningpreferences" value="videos"> Videos
+                                </label>
+                                <label for="articles">
+                                <input type="checkbox" id="articles" name="learningpreferences" value="articles"> Articles
+                                </label>
+                                <label for="infographics">
+                                <input type="checkbox" id="infographics" name="learningpreferences" value="infographics"> Infographics
+                                </label>
+                            </fieldset>
+                        </div>
+                    </div>
+                    <div class="form-group text-center">
+                        <button type="submit" class="btn btn-custom">Submit Registration</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Bootstrap JS for interactivity -->
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <script>
+        $(function () {
+            $('[data-toggle="tooltip"]').tooltip()
+        });
+
+        document.addEventListener('DOMContentLoaded', function() {
+            const navLinks = document.querySelectorAll('.slider-nav .nav-link');
+        
+            // Set maximum date for diagnosisDate
+            document.getElementById('diagnosisDate').max = new Date().toISOString().split('T')[0];
+        
+            navLinks.forEach(link => {
+                link.addEventListener('click', function() {
+                    document.querySelector('.nav-link.active')?.classList.remove('active');
+                    link.classList.add('active');
+                });
+            });
+        
+            document.getElementById('fullName').addEventListener('input', function() {
+                if (this.value.length > 0) {
+                    this.style.borderColor = '#4CAF50'; // Green border for input content
+                } else {
+                    this.style.borderColor = '#ccc'; // Default border color
+                }
+            });
+        
+            var tooltipIcons = document.querySelectorAll('.tooltip-icon');
+            tooltipIcons.forEach(function(icon) {
+                icon.addEventListener('click', function() {
+                    // Code to show the tooltip text
+                    alert(icon.getAttribute('data-tooltip'));
+                });
+            });
+        });
+    </script>
+</body>
+</html>
+

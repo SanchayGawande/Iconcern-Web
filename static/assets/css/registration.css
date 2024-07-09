@@ -1,0 +1,168 @@
+
+body, html {
+    margin: 0;
+    padding: 0;
+    font-family: "Open sans", sans-serif;
+
+	font-size: large;
+	
+}
+
+
+.slider-nav {
+    position:fixed; 
+    justify-content: center;
+    padding: 10px 0;
+    
+}
+
+.nav-link {
+    color: #0056b3; /* Blue for text */
+    text-decoration: none;
+    padding: 10px 15px;
+    font-size: 25px;
+    border-bottom: 3px solid transparent; /* Invisible border for a consistent box size */
+}
+
+/* Assuming your main navbar has fixed positioning */
+body {
+    padding-top: 00px; /* Adjust based on your main navbar's height */
+}
+
+.form-section {
+    background-color: #ffffff; /* White background for the form */
+    padding: 20px;
+    margin-bottom: 30px; /* Space between each form section */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Subtle shadow for depth */
+    border-radius: 10px; /* Rounded corners for aesthetics */
+}
+
+.section-header h2 {
+    text-align: center;
+    color: #000000; /* Dark text for the section title */
+    margin-bottom: 20px;
+    font-family: "Open sans", sans-serif;
+	font-size: 25px;
+
+}
+
+.info-form {
+    max-width: 800px; /* Or any other max-width or width you prefer */
+    margin: auto; /* Centers the form in the section */
+}
+
+.form-group {
+    margin-bottom: 15px;
+}
+
+.form-group label {
+    font-family: "Open sans", sans-serif;
+    display: flex;
+    margin-bottom: 5px;
+    font-weight: normal; /* Ensure labels are not bold */
+}
+
+.form-group .input-box{
+    display:flex;
+  align-items: center;
+  height: 50px;
+  width: 60%;
+  margin: 20px 0;
+  position: relative;
+}
+.form-group .input-box input[type="text"],
+.form-group .input-box input[type="number"], 
+.form-group .input-box input[type="date"],
+.form-group .input-box textarea,
+.form-group .input-box input[type="fieldset"]{
+    font-family: "Open sans", sans-serif;  
+    height: 100%;
+    width: 100%;
+    outline: none;
+    border: none;
+    padding: 0 30px;
+    font-size: 16px;
+    font-weight: 500;
+    border-bottom: 2px solid rgba(0,0,0,0.2);
+    /* transition: all 0.3s ease; */
+}
+
+.form-group .input-box input:focus,
+.form-group .input-box input:valid{
+  border-color:  #115c9b;
+}
+
+
+  .form-group .input-box label {
+    display: flex;
+    margin-left: 10px; /* Adjust as needed */
+    font-size: 16px;
+  }
+
+  .form-group .input-box .radio-group {
+    display: flex;
+    gap: 20px; /* Adjust space between radio buttons */
+}
+
+.form-group .input-box .radio-group input[type="radio"] {
+    font-family: "Open sans", sans-serif;  
+    height: 100%;
+    width: 100%;
+    outline: none;
+    border: none;
+    padding: 0 30px;
+    font-size: 16px;
+    font-weight: 500;
+    border-bottom: 2px solid rgba(0,0,0,0.2);
+    transition: all 0.3s ease;
+}
+
+.form-group .input-box  label {
+    font-family: "Open sans", sans-serif;
+    display: inline-block;
+    margin-bottom: 5px;
+    font-weight: normal;  /* Ensure labels are not bold */
+    margin-right: 15px;
+}
+
+button[type="submit"] {
+    background-color: #0056b3; /* Your preferred color for the submit button */
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    display: block; /* Makes the button a block element */
+    width: 10%; /* Button width matches the form fields */
+    box-sizing: border-box; /* Includes padding and border in the element's total width and height */
+    margin: 0 auto; /* This will horizontally center the button */
+   
+}
+
+button[type="submit"]:hover {
+    background-color: #003d82; /* Darker blue on hover */
+}
+
+.tooltip-icon {
+    display: inline-block;
+    margin-left: 5px;
+    color: #0056b3;
+    cursor: help;
+}
+
+.tooltip-icon:hover::after {
+    content: attr(data-tooltip);
+    position: absolute;
+    left: 100%;
+    top: 0;
+    white-space: nowrap;
+    background-color: #ffffff;
+    color: #333333;
+    border: 1px solid #cccccc;
+    padding: 5px;
+    border-radius: 4px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    font-size: 0.875em;
+    z-index: 1000;
+}
+

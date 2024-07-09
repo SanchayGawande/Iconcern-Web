@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html class="no-js">
+    <head>
+        <meta charset="utf-8">
+        <title>Iconcern</title>
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <style>
+            
+            .chatbot-logo {
+                position: fixed;
+                position: fixed;
+                bottom: 20px;
+                right: 20px;
+                z-index: 9999; /* Ensure the logo appears on top of other elements */
+                cursor: pointer;
+                width: 50px; /* Set the width of the logo */
+                height: auto; /* Maintain aspect ratio */
+            }
+            .about-us-col {
+                margin-bottom: 20px; /* Adjust as needed */
+            }
+            
+        </style>
+        <!DOCTYPE html>
+<html class="no-js">
+<head>
+    <meta charset="utf-8">
+    <title>Iconcern</title>
+    <meta name="description" content="">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    
+    <!-- Fonts -->
+    <link href='http://fonts.googleapis.com/css?family=Open+Sans:400,300,700' rel='stylesheet' type='text/css'>
+    <link href='http://fonts.googleapis.com/css?family=Dosis:400,700' rel='stylesheet' type='text/css'>
+
+    <!-- Bootstrap -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='assets/css/bootstrap.css') }}">
+
+    <!-- Font awesome -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='assets/css/font-awesome.min.css') }}">
+
+    <!-- Owl carousel -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='assets/css/owl.carousel.css') }}">
+
+    <!-- Template main Css -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='assets/css/style.css') }}">
+    
+    <!-- Modernizr -->
+    <script src="{{ url_for('static', filename='assets/js/modernizr-2.6.2.min.js') }}"></script>
+
+</head>
+<body>
+<header class="main-header">
+    <nav class="navbar navbar-static-top">
+        <div class="navbar-main">
+            <div class="container">
+                <div class="navbar-header">
+                    <a class="navbar-brand" href="/home"><img src="{{ url_for('static', filename='assets/images/logo.png') }}" alt=""></h2></a>
+                </div>
+                <div id="navbar" class="navbar-collapse collapse pull-right">
+                    <ul class="nav navbar-nav">
+                        <li><a href="/home">Home</a></li>
+                        <li><a href="/articles">Articles</a></li>
+                        {% if 'user' in session %}
+                            <li class="has-child">
+                                <a href="#">Profile</a>
+                                <ul class="submenu">
+                                    <li class="submenu-item"><a href="/userprofile">User Profile</a></li>
+                                    <li class="submenu-item"><a href="/logout">Logout</a></li>
+                                </ul>
+                            </li>
+                        {% else %}
+                            <li><a href="/loginpage">Login</a></li>
+                        {% endif %}
+                    </ul>
+                </div> <!-- /#navbar -->
+            </div> <!-- /.container -->
+        </div> <!-- /.navbar-main -->
+    </nav>
+</header> <!-- /. main-header -->
+</body>
+</html>

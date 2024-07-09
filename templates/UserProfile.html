@@ -1,0 +1,347 @@
+<!DOCTYPE html>
+<html class="no-js">
+    <head>{% include 'header.html' %}</head>
+	<link rel="stylesheet" href="{{ url_for('static', filename='assets/css/registration.css') }}">
+	<style>
+		.update-popup {
+			position: fixed;
+			left: 0;
+			top: 0;
+			width: 100%;
+			height: 100%;
+			background-color: rgba(0,0,0,0.5);
+			display: flex;
+			justify-content: center;
+			align-items: center;
+			z-index: 1000; /* Ensure it sits above other content */
+		}
+
+		.update-popup-content {
+			background-color: white;
+			padding: 20px;
+			border-radius: 5px;
+			box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+		}
+
+		.close-btn {
+			float: right;
+			font-size: 28px;
+			cursor: pointer;
+		}
+	</style>
+<body>
+    <div class="page-heading text-center">
+		<div class="container zoomIn animated">			
+			<h1 class="page-title">PROFILE <span class="title-under"></span></h1>
+			<p class="page-description">
+				KEEP YOUR PROFILE UP TO DATE
+			</p>	
+		</div>
+	</div>
+
+	<div class="main-container">
+
+		<div class="container">
+
+			<div class="row ">
+
+				<div class="col-md-12 fadeIn animate-onscroll">
+
+					<h2 class="title-style-2"> Your Profile <span class="title-under"></span></h2>
+
+					
+						<div role="tabpanel">
+
+							<!-- Nav tabs -->
+							<ul class="nav nav-tabs" role="tablist">
+								<li role="presentation" class="active"><a href="#personalDetails" aria-controls="personalDetails" role="tab" data-toggle="tab">Personal Information</a></li>
+								<li role="presentation"><a href="#medicalinformation" aria-controls="medicalinformation" role="tab" data-toggle="tab">Medical Information</a></li>
+								<li role="presentation"><a href="#lifestyle" aria-controls="lifestyle" role="tab" data-toggle="tab">Lifestyle Information</a></li>
+								<li role="presentation"><a href="#goals" aria-controls="goals" role="tab" data-toggle="tab">Goals and Preferences</a></li>
+							</ul>
+							<form id="personalInfoForm">
+							<!-- Tab panes -->
+							<div class="tab-content">
+								
+								<div role="tabpanel" class="tab-pane active" id="personalDetails">
+									<div class="section-header" >
+										<h2>Personal Information</h2>
+									</div>
+									<section id="personalDetails" class="form-section" >
+										
+										<div class="form-group">
+											<div class="input-box">
+												<label for="fullName">Full Name or Study ID:</label>
+												<input type="text" id="fullName" name="fullName" required>
+											</div>
+										</div>
+								
+										<div class="form-group">
+											<div class="input-box">
+												<label for="age">Age:</label>
+												<input type="number" id="age" name="age" required min="0">
+											</div>
+										</div>
+										<div class="form-group">
+											<div class="input-box">
+												<label>Gender:</label>
+												<div class="radio-group">
+													<input type="radio" id="male" name="gender" value="male">
+													<label for="male">Male</label>
+													<input type="radio" id="female" name="gender" value="female">
+													<label for="female">Female</label>
+													<input type="radio" id="other" name="gender" value="other">
+													<label for="other">Other</label>
+												</div>
+											</div>
+										</div>
+										 
+									</section>	
+								</div>
+								<div role="tabpanel" class="tab-pane" id="medicalinformation">
+									<div class="section-header">
+										<h2>Medical Information</h2>
+									</div>
+									<section id="medicalinformation" class="form-section">
+										
+										<div class="form-group">
+											<div class="input-box">
+												<label for="diagnosisDate">Diagnosis Date:</label>
+												<input type="date" id="diagnosisDate" name="diagnosisDate" required>
+											</div>
+										</div>
+										<div class="form-group">
+											<div class="input-box">
+												<label for="bgl">Blood Glucose Levels:</label>
+												<input type="number" id="bloodglucoselevels" name="bloodglucoselevels" required min="0">
+											</div>
+										</div>
+										<div class="form-group">
+											<div class="input-box">
+												<label for="omc">Other Medical Conditions:</label>
+												<textarea id="otherConditions" name="otherConditions" rows="4" cols="50" placeholder="Enter any other health conditions here..."></textarea>
+											</div>
+										 </div>
+									</section>
+								</div>
+							
+								
+								<div role="tabpanel" class="tab-pane" id="lifestyle">
+									<div class="section-header">
+										<h2>Lifestyle Information</h2>
+									</div>
+									<section id="lifestyle" class="form-section">
+										
+									
+											<div class="form-group">
+												<div class="input-box">
+												<label>Dietary Preferences:</label>
+												<div class="radio-group" id="dietradio" style="display: inline-flex;">
+													<input type="radio" id="vegetarian" name="diet" value="vegetarian">
+													<label for="male">Vegetarian</label>
+													<input type="radio" id="vegan" name="diet" value="vegan">
+													<label for="female">Vegan</label>
+													<input type="radio" id="glutenFree" name="diet" value="glutenFree">
+													<label for="other">GlutenFree</label>
+													<input type="radio" id="kosher" name="diet" value="kosher">
+													<label for="other">Kosher</label>
+													<input type="radio" id="halal" name="diet" value="halal">
+													<label for="other">Halal</label>
+												</div>
+												</div>
+											</div>
+											
+											<div class="form-group">
+												<div class="input-box">
+												<label for="pal">Physical activity level:</label>
+												<input type="number" id="physicalactivitylevel" name="physicalactivitylevel" required min="0">
+												</div>
+											</div>
+								
+											<div class="form-group">
+												<div class="input-box">
+												<label for="weight">Weight:</label>
+												<input type="number" id="weight" name="weight" required min="0">
+												</div>
+											</div>
+								
+											<div class="form-group">
+												<div class="input-box">
+												<label for="height">Height:</label>
+												<input type="number" id="height" name="height" required min="0">
+												</div>
+											</div>
+								
+								
+									</section>	
+								</div>
+								<div role="tabpanel" class="tab-pane" id="goals">
+									<div class="section-header">
+										<h2>Goals and Preferences</h2>
+									</div>
+									<section id="goals" class="form-section" >
+										
+										
+											<div class="form-group">
+												<div class="input-box">
+												<label for="mg">Management Goals:</label>
+												<textarea id="managementgoals" name="managementgoals" rows="4" cols="50" placeholder="•	Management Goals: Such as lowering blood sugar, losing weight, increasing physical activity, or improving diet write here..."></textarea>
+												</div>
+								
+											</div>
+								
+											<div class="form-group" id="Learningpreferences">
+												<div class="input-box">
+												<fieldset>
+													<label>Learning Preferences:</label>
+													
+													<label for="videos">
+													<input type="checkbox" id="videos" name="learningpreferences" value="videos">
+													Videos
+													</label>
+													
+													<label for="articles">
+													<input type="checkbox" id="articles" name="learningpreferences" value="articles">
+													Articles
+													</label>
+								
+													<label for="infographics">
+														<input type="checkbox" id="infographics" name="learningpreferences" value="infographics">
+														Infographics
+													</label>
+												</fieldset>
+												</div>
+											</div>
+										
+									</section>	
+								</div>
+							</div>
+							<button type="submit" id="updateButton" class="btn btn-next" disabled>Update</button>
+							<div id="updatePopup" class="update-popup" style="display: none;">
+								<div class="update-popup-content">
+									<span class="close-btn" onclick="closePopup()">OK</span>
+									<p>Profile updated successfully!</p>
+								</div>
+							</div>
+							</form>
+						</div>
+						<p></p>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	
+	
+    {% include 'footer.html' %}
+
+</body>
+
+<script>
+		document.addEventListener('DOMContentLoaded', function() {
+    	fetch('/getuserprofile')
+			.then(response => {
+				if (!response.ok) {
+					throw new Error('Network response was not ok');
+				}
+				return response.json();
+			})
+			.then(data => {
+					document.getElementById('fullName').value = data.fullName;
+					document.getElementById('age').value = data.age;
+					document.querySelector(`input[name="gender"][value="${data.gender}"]`).checked = true;	
+					document.getElementById('diagnosisDate').value = data.diagnosisDate;
+					document.getElementById('bloodglucoselevels').value = data.bloodglucoselevels;
+					document.getElementById('otherConditions').value = data.otherConditions;
+					document.querySelector(`input[name="diet"][value="${data.diet}"]`).checked = true;	
+					document.getElementById('physicalactivitylevel').value = data.physicalactivitylevel;
+					document.getElementById('weight').value = data.weight;
+					document.getElementById('height').value = data.height;
+					document.getElementById('managementgoals').value = data.managementgoals;
+					document.querySelector(`input[name="learningpreferences"][value="${data.learningpreferences}"]`).checked = true;	
+
+			})
+			.catch(error => {
+				console.error('There was a problem with the fetch operation:', error);
+			});
+		});  
+		
+		function showPopup() {
+			document.getElementById('updatePopup').style.display = 'flex';
+		}
+
+		function closePopup() {
+			document.getElementById('updatePopup').style.display = 'none';
+		}
+
+		document.addEventListener('DOMContentLoaded', function() {
+			let isFormChanged = false;
+			const form = document.getElementById('personalInfoForm');
+			const updateButton = document.getElementById('updateButton');
+
+			// Function to enable the update button and mark the form as changed
+			const enableUpdateButtonAndMarkChanged = () => {
+				updateButton.disabled = false;
+				isFormChanged = true;
+			};
+
+			// Add event listeners to all form inputs
+			Array.from(form.elements).forEach(element => {
+				if (element.tagName === "INPUT" || element.tagName === "TEXTAREA" || element.tagName === "SELECT") {
+					element.addEventListener('change', enableUpdateButtonAndMarkChanged);
+					element.addEventListener('keyup', enableUpdateButtonAndMarkChanged);
+				}
+			});
+
+			// Warn the user about unsaved changes if they try to leave the page
+			window.addEventListener('beforeunload', function(e) {
+				if (isFormChanged) {
+					// Cancel the event as stated by the standard.
+					e.preventDefault();
+					// Chrome requires returnValue to be set.
+					e.returnValue = 'You have unsaved changes! Are you sure you want to leave?';
+				}
+			});
+
+			// Form submission event listener
+			form.addEventListener('submit', function(e) {
+				e.preventDefault(); 
+
+				const formData = {
+					fullName: document.getElementById('fullName').value,
+					age: document.getElementById('age').value,
+					gender: document.querySelector('input[name="gender"]:checked').value,
+					diagnosisDate: document.getElementById('diagnosisDate').value,
+					bloodglucoselevels: document.getElementById('bloodglucoselevels').value,
+					otherConditions: document.getElementById('otherConditions').value,
+					diet: document.querySelector('input[name="diet"]:checked').value,
+					physicalactivitylevel: document.getElementById('physicalactivitylevel').value,
+					weight: document.getElementById('weight').value,
+					height: document.getElementById('height').value,
+					managementgoals: document.getElementById('managementgoals').value,
+					learningpreferences: document.querySelector('input[name="learningpreferences"]:checked').value
+				};
+
+				// Send the updated data to the server using fetch
+				fetch('/updateuserprofile', {
+					method: 'POST',
+					headers: {
+						'Content-Type': 'application/json',
+					},
+					body: JSON.stringify(formData),
+				})
+				.then(response => response.json())
+				.then(data => {
+					showPopup(); // Assuming this function shows a success message
+					updateButton.disabled = true; // Disable the update button after submission
+					isFormChanged = false; // Mark form as unchanged after successful update
+				})
+				.catch(error => {
+					console.error('Error updating user data:', error);
+				});
+			});
+		});
+
+		
+   </script>
+</html>

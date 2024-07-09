@@ -1,96 +1,493 @@
 <!DOCTYPE html>
-<!-- Created by CodingLab |www.youtube.com/c/CodingLabYT-->
 <html lang="en" dir="ltr">
-  <head>
+<head>
     <meta charset="UTF-8">
-    <!--<title> Login and Registration Form in HTML & CSS | CodingLab </title>-->
     <link rel="stylesheet" href="{{ url_for('static', filename='assets/css/style1.css') }}">
-    <!-- Fontawesome CDN Link -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-   </head>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.0.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.0.0/firebase-auth-compat.js"></script>
+    <script async defer crossorigin="anonymous" src="https://connect.facebook.net/en_US/sdk.js"></script>
+    
+    <style>
+        .flip-container {
+            perspective: 1000px;
+            position: relative;
+        }
+        .front, .back {
+            backface-visibility: hidden;
+            transition: transform 0.6s linear;
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+        }
+        .back {
+            transform: rotateY(180deg);
+        }
+        #flip:checked ~ .flip-container .front {
+            transform: rotateY(-180deg);
+        }
+        #flip:checked ~ .flip-container .back {
+            transform: rotateY(0deg);
+        }
+        .back-to-dashboard {
+            position: fixed;
+            bottom: 20px;
+            left: 20px;
+            background-color: white;
+            color: black;
+            padding: 10px 15px;
+            border-radius: 5px;
+            text-decoration: none;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            transition: background-color 0.3s, color 0.3s;
+        }
+        .back-to-dashboard:hover {
+            background-color: #f0f0f0;
+            color: black;
+        }
+        .signup-success-popup {
+            display: none;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background-color: white;
+            padding: 20px;
+            border: 1px solid #ccc;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+            z-index: 1000;
+        }
+        .signup-success-popup p {
+            margin: 0;
+            padding-bottom: 10px;
+        }
+        .signup-success-popup button {
+            padding: 5px 10px;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
+        .signup-success-popup button:hover {
+            background-color: #0056b3;
+        }
+        /* Updated Button Styling */
+        .auth-button {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 48%; /* Adjusted width to fit side by side */
+            padding: 10px 12px; /* Optimal padding for size consistency */
+            margin: 5px 1%; /* Small margins for proper spacing */
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 15px; /* Suitable font size for readability */
+            font-weight: bold;
+            text-align: center;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.25); /* Subtle shadow for depth */
+            transition: background-color 0.3s, transform 0.2s;
+        }
+        .google-button {
+            background-color: #db4437; /* Google Red */
+        }
+        .google-button:hover {
+            background-color: #c33d2c;
+            transform: translateY(-2px);
+        }
+        .facebook-button {
+            background-color: #4267B2; /* Facebook Blue */
+        }
+        .facebook-button:hover {
+            background-color: #365899;
+            transform: translateY(-2px);
+        }
+        .auth-buttons {
+            display: flex;
+            justify-content: space-between;
+        }
+    </style>
+</head>
 <body>
-  <div class="container">
-    <input type="checkbox" id="flip">
-    <div class="cover">
-      <div class="front">
-        <img src="{{ url_for('static', filename='assets/images/doctor.jpeg') }}" alt="">
-        <div class="text">
-          <span class="text-1">Let's get connected <br> </span>
-          <span class="text-2"></span>
-        </div>
-      </div>
-      <div class="back">
-        <img class="backImg" src="{{ url_for('static', filename='assets/images/backImg.jpg') }}" alt="">
-        <div class="text">
-          <span class="text-1">Complete miles of journey <br> with one step</span>
-          <span class="text-2">Let's get started</span>
-        </div>
-      </div>
-    </div>
-    <div class="forms">
-        <div class="form-content">
-          <div class="login-form">
-            <div class="title">Login</div>
-          <form action="#">
-            <div class="input-boxes">
-              <div class="input-box">
-                <i class="fas fa-envelope"></i>
-                <input type="text" placeholder="Enter your email" required>
-              </div>
-              <div class="input-box">
-                <i class="fas fa-lock"></i>
-                <input type="password" placeholder="Enter your password" required>
-              </div>
-              <div class="text"><a href="#">Forgot password?</a></div>
-              <div class="button input-box">
-                <input type="submit" value="Sumbit">
-              </div>
-              <div class="text sign-up-text">Don't have an account? <label for="flip">Sigup now</label></div>
+    <div class="container">
+        <input type="checkbox" id="flip">
+        <div class="cover">
+            <div class="front">
+                <img src="{{ url_for('static', filename='assets/images/logindoctor.jpg') }}" alt="Doctor login image">
+                <div class="text">
+                    <span class="text-1">Let's get connected <br></span>
+                </div>
             </div>
-        </form>
-      </div>
-        <div class="signup-form">
-          <div class="title">Signup</div>
-        <form action="#">
-            <div class="input-boxes">
-              <div class="input-box">
-                <i class="fas fa-user"></i>
-                <input type="text" placeholder="Enter your name" required>
-              </div>
-              <div class="input-box">
-                <i class="fas fa-envelope"></i>
-                <input type="text" placeholder="Enter your email" required>
-              </div>
-              <div class="input-box">
-                <i class="fas fa-calendar-alt"></i>
-                <input type="text" placeholder="Enter age" required>
-              </div>
-              <div class="input-box">
-                <i class="fas fa-venus-mars"></i>
-                <label>
-                    <input type="radio" name="gender" value="male" required> Male
-                </label>
-                <label>
-                    <input type="radio" name="gender" value="female"> Female
-                </label>
-                <label>
-                    <input type="radio" name="gender" value="other"> Other
-                </label>
-              </div>
-              <div class="input-box">
-                <i class="fas fa-lock"></i>
-                <input type="password" placeholder="Enter your password" required>
-              </div>
-              <div class="button input-box">
-                <input type="submit" value="Sumbit">
-              </div>
-              <div class="text sign-up-text">Already have an account? <label for="flip">Login now</label></div>
+            <div class="back">
+                <img src="{{ url_for('static', filename='assets/images/logindoctor.jpg') }}" alt="Doctor login image">
+                <div class="text">
+                    <span class="text-1">Let's get connected</span>
+                </div>
             </div>
-      </form>
+        </div>
+        <div class="forms">
+            <div class="form-content">
+                <div class="login-form">
+                    <div class="title">Login</div>
+                    <form action="/login" method="post">
+                        <div class="input-boxes">
+                            <div class="input-box">
+                                <i class="fas fa-envelope"></i>
+                                <input type="text" name="email" placeholder="Enter your email" required>
+                            </div>
+                            <div class="input-box">
+                                <i class="fas fa-lock"></i>
+                                <input type="password" name="password" placeholder="Enter your password" required>
+                            </div>
+                            <div class="text"><a href="/forgot-password">Forgot password?</a></div>
+                            <div class="button input-box">
+                                <input type="submit" value="Submit">
+                            </div>
+                            <div class="text sign-up-text">Don't have an account? <label for="flip">Signup now</label></div>
+                        </div>
+                        <div class="auth-buttons">
+                            <button class="auth-button facebook-button" onclick="loginWithFacebook()">
+                                <i class="fab fa-facebook-f"></i> Login with Facebook
+                            </button>
+                            <button class="auth-button google-button" onclick="loginWithGoogle()">
+                                <i class="fab fa-google"></i> Login with Google
+                            </button>
+                        </div>
+                    </form>
+                </div>
+                <div class="signup-form">
+                    <div class="title">Signup</div>
+                    <form>
+                        <div class="input-boxes">
+                            <div class="input-box">
+                                <i class="fas fa-envelope"></i>
+                                <input type="email" name="signupemail" id="signupemail" placeholder="Enter your email" required>
+                            </div>
+                            <div class="input-box">
+                                <i class="fas fa-lock"></i>
+                                <input type="password" name="signuppassword" id="signuppassword" placeholder="Enter your password" required>
+                            </div>
+                            <div class="input-box">
+                                <i class="fas fa-lock"></i>
+                                <input type="password" name="confirmpassword" placeholder="Enter confirm password" required>
+                            </div>
+                            <div class="button input-box">
+                                <input type="button" onclick="signUp()" value="Verify your email">
+                            </div>
+                            <div class="text sign-up-text">
+                                Already have an account? <label for="flip">Login now</label>
+                            </div>
+                            <div class="auth-buttons">
+                                <button class="auth-button facebook-button" onclick="signUpWithFacebook()">
+                                    <i class="fab fa-facebook-f"></i> Sign Up with Facebook
+                                </button>
+                                <button class="auth-button google-button" onclick="signInWithGoogle()">
+                                    <i class="fab fa-google"></i> Sign in with Google
+                                </button>
+                            </div>
+                        </div>
+                    </form>
+                    {% if 'signup' in session %}
+                    <div id="signup-success-popup" class="signup-success-popup">
+                        <p>Signup successful!</p>
+                        <button onclick="redirectToLogin()">OK</button>
+                    </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
     </div>
-    </div>
-    </div>
-  </div>
+    <a href="/home" class="back-to-dashboard">
+        <i class="fas fa-arrow-left"></i> Back to Home
+    </a>
+</div>
+<script>
+    window.onload = function() {
+      var form = document.querySelector(".signup-form form");
+      var email = document.querySelector(".signup-form input[name='email']");
+      var password = document.querySelector(".signup-form input[name='password']");
+      var confirm_password = document.querySelector(".signup-form input[name='confirm_password']");
+
+      var emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+      var strongPasswordPattern = new RegExp("^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[^\\da-zA-Z]).{8,}$");
+
+      form.onsubmit = function(e) {
+        if (!emailPattern.test(email.value)) {
+          alert("Please enter a valid email address.");
+          e.preventDefault();
+          return;
+        }
+
+        if (!strongPasswordPattern.test(password.value)) {
+          alert("Password must contain at least one uppercase letter, one lowercase letter, one number, one special character, and be at least 8 characters long.");
+          e.preventDefault();
+          return;
+        }
+
+        if (password.value !== confirm_password.value) {
+          alert("Passwords do not match.");
+          e.preventDefault();
+        }
+      };
+    }
+
+      const firebaseConfig = {
+        apiKey: "AIzaSyCzmYNtsdSqbHyz7z6XwtAFgOODXfbk8ac",
+        authDomain: "dia-user-login.firebaseapp.com",
+        projectId: "dia-user-login",
+        storageBucket: "dia-user-login.appspot.com",
+        messagingSenderId: "938108005404",
+        appId: "1:938108005404:web:cb72eff57c5045690643d9",
+        measurementId: "G-HH3XKTM96F"
+      };
+        firebase.initializeApp(firebaseConfig);
+
+
+            window.fbAsyncInit = function() {
+              FB.init({
+                appId      : '1378276456902042',
+                xfbml      : true,
+                version    : 'v19.0'
+              });
+              FB.AppEvents.logPageView();
+            };
+          
+            (function(d, s, id){
+               var js, fjs = d.getElementsByTagName(s)[0];
+               if (d.getElementById(id)) {return;}
+               js = d.createElement(s); js.id = id;
+               js.src = "https://connect.facebook.net/en_US/sdk.js";
+               fjs.parentNode.insertBefore(js, fjs);
+             }(document, 'script', 'facebook-jssdk'));
+          
+
+             function loginWithFacebook() {
+                FB.login(function(response) {
+                    if (response.authResponse) {
+                        var credential = firebase.auth.FacebookAuthProvider.credential(response.authResponse.accessToken);
+                        firebase.auth().signInWithCredential(credential)
+                            .then((result) => {
+                                // Retrieve the ID token as it returns a promise
+                                result.user.getIdToken().then(function(idToken) {
+                                    // Send the token to your server
+                                    fetch('/login/facebook', {
+                                        method: 'POST',
+                                        headers: {
+                                            'Content-Type': 'application/json'
+                                        },
+                                        body: JSON.stringify({ firebase_token: idToken })
+                                    })
+                                    .then(response => response.json())
+                                    .then(data => {
+                                        if (data.redirect_url) {
+                                            window.location.href = data.redirect_url;
+                                        }
+                                    })
+                                    .catch(error => console.error('Error during login:', error));
+                                });
+                            })
+                            .catch((error) => {
+                                console.error('Firebase auth failed', error);
+                            });
+                    } else {
+                        console.error('User failed to authenticate with Facebook');
+                    }
+                }, { scope: 'email,public_profile' });
+            }
+            
+            
+            function signUpWithFacebook() {
+                FB.login(function(response) {
+                    if (response.authResponse) {
+                        var accessToken = response.authResponse.accessToken;
+                        firebase.auth().signInWithCredential(firebase.auth.FacebookAuthProvider.credential(accessToken))
+                            .then((result) => {
+                                result.user.getIdToken().then(function(idToken) {
+                                    fetch('/signup/facebook', {
+                                        method: 'POST',
+                                        headers: {
+                                            'Content-Type': 'application/json'
+                                        },
+                                        body: JSON.stringify({ firebase_token: idToken })
+                                    })
+                                    .then(response => response.json())
+                                    .then(data => {
+                                        if (data.redirect) {
+                                            window.location.href = data.redirect;
+                                        }
+                                    })
+                                    .catch(error => console.error('Error during signup:', error));
+                                });
+                            }).catch((error) => {
+                                console.error('Firebase auth failed during signup', error);
+                            });
+                    } else {
+                        console.error('User failed to authenticate with Facebook for signup');
+                    }
+                }, { scope: 'email,public_profile' });
+            }
+
+            
+    function signUp() {
+    var email = document.getElementById('signupemail').value;
+    var password = document.getElementById('signuppassword').value;
+
+    firebase.auth().createUserWithEmailAndPassword(email, password)
+        .then((userCredential) => {
+            // Signup successful. Now send an email verification.
+            userCredential.user.sendEmailVerification()
+                .then(() => {
+                    // Verification email sent.
+                    console.log('Verification email sent.');
+                    alert('Verification email sent. Please check your inbox and verify your email.');
+
+                    // Wait for email verification before proceeding
+                    waitForEmailVerification(userCredential.user,password);
+                })
+                .catch((error) => {
+                    // Error sending verification email.
+                    console.error('Error sending verification email:', error);
+                    alert('Error sending verification email. Please try again.');
+                });
+        })
+        .catch((error) => {
+            // Error signing up.
+            console.error('Error signing up:', error);
+            alert('Error during signup. Please try again.');
+        });
+}
+
+// Setup Google Sign-In
+function signInWithGoogle() {
+  var provider = new firebase.auth.GoogleAuthProvider();
+  firebase.auth().signInWithPopup(provider).then((result) => {
+    var user = result.user;
+    user.getIdToken().then(function(idToken) {
+      // Now we have the ID token, let's send it to the server
+      fetch('/signup/google', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ firebase_token: idToken })
+      }).then(response => response.json())
+      .then(data => {
+        if (data.redirect_url) {
+          window.location.href = data.redirect_url; // Redirect after login
+        }
+      })
+      .catch(error => {
+        console.error('Error during signup with Google:', error);
+      });
+    });
+  }).catch((error) => {
+    console.error('Google sign-in error', error.code, error.message);
+  });
+}
+
+// login with Google
+function loginWithGoogle() {
+  var provider = new firebase.auth.GoogleAuthProvider();
+  firebase.auth().signInWithPopup(provider).then((result) => {
+      var user = result.user;
+      user.getIdToken().then(function(idToken) {
+          fetch('/login/google', {
+              method: 'POST',
+              headers: {
+                  'Content-Type': 'application/json'
+              },
+              body: JSON.stringify({ firebase_token: idToken })
+          }).then(response => response.json())
+          .then(data => {
+              if (data.redirect_url) {
+                  window.location.href = data.redirect_url; // Redirect after login
+              } else if (data.error) {
+                  // Display error in modal
+                  document.getElementById('errorMessage').textContent = data.error;
+                  $('#errorModal').modal('show');
+              }
+          })
+          .catch(error => {
+              console.error('Error during login with Google:', error);
+              alert('Failed to process login.'); // General error alert
+          });
+      });
+  }).catch((error) => {
+      console.error('Google sign-in error:', error);
+      alert('Google sign-in failed: ' + error.message); // Google API error
+  });
+}
+
+
+
+
+function waitForEmailVerification(user,password) {
+    console.log('Waiting for email verification...');
+    const checkVerificationStatus = setInterval(() => {
+        user.reload().then(() => {
+            console.log('Checking email verification status...');
+            if (user.emailVerified) {
+                console.log('Email is verified.');
+                clearInterval(checkVerificationStatus);
+                saveUserDataToMongoDB(user,password);
+            } else {
+                console.log('Email not verified yet.');
+            }
+        }).catch((error) => {
+            console.error('Error reloading user:', error);
+            clearInterval(checkVerificationStatus); 
+        });
+    }, 3000);
+}
+
+function saveUserDataToMongoDB(user,password) {
+    var userData = {
+        email: user.email,
+        emailVerified: user.emailVerified,
+        password:password
+    };
+
+    fetch('/signup', {
+      method: 'POST',
+      headers: {
+          'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(userData),
+  })
+  .then(response => {
+      if (response.redirected) {
+          window.location.href = response.url;
+      } else {
+          return response.json();
+      }
+  })
+  .then(data => { 
+  })
+  .catch((error) => {
+      console.error('Error:', error);
+  });
+}
+
+$.ajax({
+    url: '/signup/facebook',
+    type: 'POST',
+    contentType: 'application/json',
+    data: JSON.stringify({ firebase_token: idToken }),
+    success: function(response) {
+        // Redirect user to the registration page
+        window.location.href = response.redirect_url;
+    },
+    error: function(xhr, status, error) {
+        // Handle error
+        console.error(error);
+    }
+});
+
+</script> 
 </body>
 </html>
